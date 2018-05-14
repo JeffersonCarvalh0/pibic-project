@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import bodyParser from 'body-parser';
 
 import config from './config';
 
 // Routes
-import { CatsRoutes } from './routes';
+import { CatsRoutes } from './routes/cat';
 
 /**  This class represents the express app itself. */
 export class App {
@@ -23,6 +24,9 @@ export class App {
         // Start and set up the database
         this.db = mongoose.createConnection(config.DBHost);
         this.configdb();
+
+        // Configure other middlewares
+        this.middlewares();
     }
 
     /** Add the routes to the router */
@@ -36,6 +40,16 @@ export class App {
 
     public configdb() {
         this.db.once('open', () => console.log(`Successfully connected with mongodb at host ${config.DBHost}`));
+    }
+
+    public middlewares() {
+        // Parse json requests
+        this.app.use(bodyParser.json());
+    }
+
+    /** Closes all opened connections */
+    public shutdown() {
+        this.db.close();
     }
 }
 

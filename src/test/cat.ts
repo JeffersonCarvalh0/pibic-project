@@ -3,8 +3,7 @@ import { assert } from 'chai';
 import mongoose from 'mongoose';
 
 import { server } from '../server';
-import { ICat } from '../db/cat';
-import { CatModel } from '../db/models';
+import { CatModel, ICat } from '../db/cat';
 
 let mockCat = {
     name: "Bolinha",

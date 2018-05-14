@@ -17,7 +17,7 @@ class MyServer {
 
     /** Closes the server's connections and shut it down */
     public shutdown() {
-        this.app.db.close();
+        this.app.shutdown();
         this.server.close();
     }
 }
