@@ -1,5 +1,6 @@
+import mongoose from 'mongoose';
 import { Schema, Document, Model, model } from 'mongoose';
-import { server } from '../server';
+import { app } from '../app';
 
 /** The cat's interface to be used within TS code */
 export interface ICat {
@@ -37,4 +38,4 @@ export interface ICatModel extends ICat, Document {
     // I can put methods related to cats here
 }
 
-export const CatModel: Model<ICatModel> = server.app.db.model<ICatModel>("Cat", CatSchema);
+export const CatModel: Model<ICatModel> = mongoose.model<ICatModel>("Cat", CatSchema);

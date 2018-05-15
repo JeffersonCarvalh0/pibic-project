@@ -11,22 +11,20 @@ import { CatsRoutes } from './routes/cat';
 export class App {
     app: express.Application; // The app itself
     router: express.Router; // The router object for modular routes
-    db: mongoose.Connection;
 
     constructor() {
         // Start the app
         this.app = express();
 
+        // Start middlewares
+        this.middlewares();
+
+        // Start and set up the database
+        this.db()
+
         // Start and setup the router
         this.router = express.Router();
         this.routes();
-
-        // Start and set up the database
-        this.db = mongoose.createConnection(config.DBHost);
-        this.configdb();
-
-        // Configure other middlewares
-        this.middlewares();
     }
 
     /** Add the routes to the router */
@@ -38,19 +36,22 @@ export class App {
         CatsRoutes.create(this.router);
     }
 
-    public configdb() {
-        this.db.once('open', () => console.log(`Successfully connected with mongodb at host ${config.DBHost}`));
+    private db() {
+        mongoose.connect(config.DBHost)
+            .then(() => console.log(`Successfuly connected with mongodb at host ${config.DBHost}`))
+            .catch((err: Error) => console.log(`The following error has ocurred: ${err}`));
     }
 
     public middlewares() {
         // Parse json requests
         this.app.use(bodyParser.json());
+        // this.app.use(bodyParser.urlencoded({ extended: true }));
     }
 
     /** Closes all opened connections */
     public shutdown() {
-        this.db.close();
+        mongoose.connection.close();
     }
 }
 
-export const app = new App();
+export const app: App = new App();
