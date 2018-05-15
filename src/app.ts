@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import { Request, Response } from 'express';
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 
 import config from './config';
 
@@ -45,7 +47,19 @@ export class App {
     public middlewares() {
         // Parse json requests
         this.app.use(bodyParser.json());
-        // this.app.use(bodyParser.urlencoded({ extended: true }));
+
+        // Configure morgan
+        if (process.env.NODE_ENV !== 'test') {
+            this.app.use(morgan(config.LOGGER, {
+                skip: (req: Request, res: Response) => { return res.statusCode < 400; },
+                stream: process.stderr
+            }));
+
+            this.app.use(morgan(config.LOGGER, {
+                skip: (req: Request, res: Response) => { return res.statusCode >= 400; },
+                stream: process.stdout
+            }));
+        }
     }
 
     /** Closes all opened connections */

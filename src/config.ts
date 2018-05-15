@@ -2,21 +2,25 @@
 interface IConfig {
     /** The database URI. */
     DBHost: string
+    LOGGER: string
 }
 
 /** Configurations for development */
 const dev: IConfig = {
-    DBHost: 'mongodb://localhost/cats'
+    DBHost: 'mongodb://localhost/cats',
+    LOGGER: 'dev'
 }
 
 /** Configurations for tests */
 const test: IConfig = {
-    DBHost: 'mongodb://localhost/cats-test'
+    DBHost: 'mongodb://localhost/cats-test',
+    LOGGER: ''
 }
 
 /** Configurations for production */
 const prod: IConfig = {
-    DBHost: 'mongodb://localhost/cats'
+    DBHost: 'mongodb://localhost/cats',
+    LOGGER: 'combined'
 }
 
 /** Interface for the object that stores the configurations */

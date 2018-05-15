@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 
-import { CatModel, ICat } from '../db/cat';
+import { ICatModel, CatModel, ICat } from '../db/cat';
 
 export class CatController {
-    public static root(req: Request, res: Response) {
-        res.status(200).send('Meow, b1tch');
+    public static getAll(req: Request, res: Response) {
+        CatModel.find({}, (err: Error, docs: ICatModel[]) => {
+            res.status(200).json({"data": docs, "errors": err});
+        });
     }
 
     public static getByName(req: Request, res: Response) {
@@ -16,12 +18,32 @@ export class CatController {
         });
     }
 
-    public static post(req: Request, res: Response) {
+    public static create(req: Request, res: Response) {
         let cat = new CatModel(req.body);
 
         cat.save((err: Error) => {
             res.statusCode = err ? 403 : 201;
-            res.location(`cats/${cat._id}`).json({"data": cat, "errors": err});
+            res.location(`cat/${cat._id}`).json({"data": cat, "errors": err});
         });
+    }
+
+    public static update(req: Request, res: Response) {
+        let update = req.body;
+        let catId = req.params.id;
+        let options = {new: true};
+
+        CatModel.findByIdAndUpdate(catId, update, options, (err: Error, doc: ICatModel | null) => {
+            res.statusCode = err ? 403 : 200;
+            res.json({"data": doc, "errors": err});
+        });
+    }
+
+    public static remove(req: Request, res: Response) {
+        let catId = req.params.id;
+
+        CatModel.findByIdAndRemove(catId, (err: Error) => {
+            res.statusCode = err ? 404 : 204;
+            res.json({"data": null, "errors": err});
+        })
     }
 }
