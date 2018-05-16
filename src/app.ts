@@ -3,11 +3,16 @@ import express from 'express';
 import { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import passport from 'passport';
 
 import config from './config';
 
+// Auth
+import './auth';
+
 // Routes
-import { CatsRoutes } from './routes/cat';
+import { CatsRoutes } from './routes/cat.routes';
+import { AuthRoutes } from './routes/auth.routes';
 
 /**  This class represents the express app itself. */
 export class App {
@@ -34,7 +39,8 @@ export class App {
         // Set the app to use the custom router
         this.app.use(this.router);
 
-        // Append cats routes
+        // Append routes to the router
+        AuthRoutes.create(this.router);
         CatsRoutes.create(this.router);
     }
 
@@ -60,6 +66,9 @@ export class App {
                 stream: process.stdout
             }));
         }
+
+        // Passport
+        this.app.use(passport.initialize());
     }
 
     /** Closes all opened connections */

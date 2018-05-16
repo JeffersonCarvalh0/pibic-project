@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction, Router } from 'express';
+import { Request, Response, Router } from 'express';
 import mongoose from 'mongoose';
 
-import { CatController } from '../controllers/cat';
+import { CatController } from '../controllers/cat.controller';
 
 /** The app's routes */
 export class CatsRoutes {

@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 
-import { ICatModel, CatModel, ICat } from '../db/cat';
+import { ICatModel, CatModel, ICat } from '../db/cat.db';
 
+/** Functions that will process the user's requests for cats */
 export class CatController {
     public static getAll(req: Request, res: Response) {
         CatModel.find({}, (err: Error, docs: ICatModel[]) => {
