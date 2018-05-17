@@ -4,27 +4,31 @@ interface IConfig {
     DBHost: string
     LOGGER: string
     SECRET: string // This should not be stored directly here.
+    SALT_ROUNDS: number
 }
 
 /** Configurations for development */
 const dev: IConfig = {
     DBHost: 'mongodb://localhost/cats',
     LOGGER: 'dev',
-    SECRET: 'kittens'
+    SECRET: 'kittens',
+    SALT_ROUNDS: 10
 }
 
 /** Configurations for tests */
 const test: IConfig = {
     DBHost: 'mongodb://localhost/cats-test',
     LOGGER: '',
-    SECRET: 'kittens'
+    SECRET: 'kittens',
+    SALT_ROUNDS: 10
 }
 
 /** Configurations for production */
 const prod: IConfig = {
     DBHost: 'mongodb://localhost/cats',
     LOGGER: 'combined',
-    SECRET: 'kittens'
+    SECRET: 'kittens',
+    SALT_ROUNDS: 12
 }
 
 /** Interface for the object that stores the configurations */

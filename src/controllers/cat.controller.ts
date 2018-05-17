@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 
-import { ICatModel, CatModel, ICat } from '../db/cat.db';
+import { CatModel, ICat } from '../db/cat.db';
 
 /** Functions that will process the user's requests for cats */
 export class CatController {
     public static getAll(req: Request, res: Response) {
-        CatModel.find({}, (err: Error, docs: ICatModel[]) => {
+        CatModel.find({}, (err: Error, docs: ICat[]) => {
             res.status(200).json({"data": docs, "errors": err});
         });
     }
@@ -33,7 +33,7 @@ export class CatController {
         let catId = req.params.id;
         let options = {new: true};
 
-        CatModel.findByIdAndUpdate(catId, update, options, (err: Error, doc: ICatModel | null) => {
+        CatModel.findByIdAndUpdate(catId, update, options, (err: Error, doc: ICat | null) => {
             res.statusCode = err ? 403 : 200;
             res.json({"data": doc, "errors": err});
         });

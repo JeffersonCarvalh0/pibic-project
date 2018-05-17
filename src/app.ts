@@ -6,8 +6,6 @@ import morgan from 'morgan';
 import passport from 'passport';
 
 import config from './config';
-
-// Auth
 import './auth';
 
 // Routes
@@ -69,6 +67,7 @@ export class App {
 
         // Passport
         this.app.use(passport.initialize());
+        this.app.use('/testAuth', passport.authenticate('jwt', { session: false }));
     }
 
     /** Closes all opened connections */

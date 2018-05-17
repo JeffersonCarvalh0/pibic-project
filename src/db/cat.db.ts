@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
 import { Schema, Document, Model, model } from 'mongoose';
 
-/** The cat's interface to be used within TS code */
-export interface ICat {
+export interface ICat extends Document {
     name: string;
     color: string;
     age: number;
 }
 
-/** The schema from which mongoose will create a collection */
 export var CatSchema = new Schema({
     createdAt: {
         type: Date,
@@ -32,9 +30,4 @@ export var CatSchema = new Schema({
     }
 });
 
-/** The model that represents documents */
-export interface ICatModel extends ICat, Document {
-    // I can put methods related to cats here
-}
-
-export const CatModel: Model<ICatModel> = model<ICatModel>("Cat", CatSchema);
+export const CatModel: Model<ICat> = model<ICat>("Cat", CatSchema);

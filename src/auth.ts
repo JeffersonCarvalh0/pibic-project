@@ -7,10 +7,14 @@ import { IUser, UserModel } from './db/user.db';
 
 // Set local strategy for authentication with username/password
 passport.use(new LocalStrategy((username, password, done) => {
-    UserModel.findOne({username: username, password: password})
+    UserModel.findOne({username: username})
     .then((user: IUser | null) => {
-        if (!user) return done(null, false, { message: 'Invalid username or password.' });
-        return done(null, user);
+        if (!user) return done(null, false, { message: 'Invalid username.' });
+        user.compare(password, (err: Error, isMatch: boolean) => {
+            if (err) throw err;
+            if (!isMatch) return done(null, false, {message: 'Invalid password'});
+            return done(null, user);
+        });
     })
     .catch((err: Error) => done(err));
 }));

@@ -3,14 +3,14 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 
 import config from '../config';
-import { IUserModel, UserModel } from '../db/user.db';
+import { IUser, UserModel } from '../db/user.db';
 
 /** Functions to process the authentication requests */
 export class AuthController {
     public static login(req: Request, res: Response) {
-        passport.authenticate('local', { session: false }, (err: Error, user: IUserModel) => {
+        passport.authenticate('local', { session: false, failureFlash: true }, (err: Error, user: IUser) => {
             res.statusCode = err || !user ? 400 : 200;
-            const token = user ? jwt.sign(user.toJSON(), config.SECRET) : null;
+            const token = user ? jwt.sign(user.toJSON(), config.SECRET, { expiresIn: '15m' }) : null;
             res.json({data: token, errors: err});
         })(req, res);
     }
@@ -20,14 +20,12 @@ export class AuthController {
 
         user.save((err: Error) => {
             res.statusCode = err ? 403 : 201;
-            res.json({data: "Success", errors: err});
+            let data: string = err ? "" : "success";
+            res.json({data: data, errors: err});
         });
     }
 
     public static testAuth(req: Request, res: Response) {
-        passport.authenticate('jwt', { session: false }, (err: Error, user: IUserModel) => {
-            res.statusCode = err || !user ? 401 : 200;
-            res.json({data: user, errors: err});
-        })(req, res);
+        res.status(200).json({ data: req.user, errors: [] });
     }
 }

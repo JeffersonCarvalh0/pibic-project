@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 import { Schema, Document, Model, model } from 'mongoose';
+import bcrypt from 'bcrypt';
 
-export interface IUser {
+import config from '../config';
+
+export interface IUser extends Document {
     createdAt: Date;
     username: string;
     password: string;
@@ -10,9 +13,11 @@ export interface IUser {
         lastName: string
     }
     email: string;
+
+    compare: (psw: string, cb: (err: Error, isMatch: boolean) => void) => boolean;
 }
 
-export var UserSchema = new Schema({
+export var UserSchema: Schema = new Schema({
     createdAt: {
         type: Date,
         required: true,
@@ -37,8 +42,20 @@ export var UserSchema = new Schema({
     }
 });
 
-export interface IUserModel extends Document, IUser {
-    // User related methods here
+UserSchema.pre('save', function(this: any, next) {
+    let user = this;
+
+    if (!user.isModified('password')) return next();
+
+    bcrypt.hash(user.password, config.SALT_ROUNDS)
+        .then(hash => { user.password = hash; next(); })
+        .catch(err => { throw err });
+});
+
+UserSchema.methods.compare = function(psw: string, cb: Function) {
+    bcrypt.compare(psw, this.password)
+        .then(res => cb(null, res))
+        .catch(err => cb(err));
 }
 
-export const UserModel: Model<IUserModel> = model<IUserModel>('User', UserSchema);
+export const UserModel: Model<IUser> = model<IUser>('User', UserSchema);
