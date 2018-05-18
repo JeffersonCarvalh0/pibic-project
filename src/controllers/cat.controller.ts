@@ -1,9 +1,16 @@
 import { Request, Response } from 'express';
+import passport from 'passport';
 
 import { CatModel, ICat } from '../db/cat.db';
+import { IUser, UserModel } from '../db/user.db';
 
 /** Functions that will process the user's requests for cats */
 export class CatController {
+    /** Check if a cat was created by a user */
+    // public static async checkCreated(): Promise<boolean> {
+    //     return false;
+    // }
+
     public static getAll(req: Request, res: Response) {
         CatModel.find({}, (err: Error, docs: ICat[]) => {
             res.status(200).json({"data": docs, "errors": err});
@@ -19,32 +26,59 @@ export class CatController {
         });
     }
 
-    public static create(req: Request, res: Response) {
-        let cat = new CatModel(req.body);
+    public static async create(req: Request, res: Response) {
+        let data: ICat | null = null;
+        let errors: Object | null = null;
+        res.statusCode = 403;
 
-        cat.save((err: Error) => {
-            res.statusCode = err ? 403 : 201;
-            res.location(`cat/${cat._id}`).json({"data": cat, "errors": err});
-        });
+        try {
+            let user = await passport.authenticate('jwt', {session: false});
+            if (user) {
+                console.log(user);
+                let cat = req.body;
+                cat.createdBy = user.username;
+                cat = new CatModel(cat);
+                cat = await cat.save();
+                if (cat) { res.statusCode = 201; data = cat; res.location(`cat/${cat._id}`); }
+            } else res.statusCode = 401;
+        } catch (err) { errors = err; }
+        res.json({ data: data, errors: errors });
     }
 
-    public static update(req: Request, res: Response) {
-        let update = req.body;
-        let catId = req.params.id;
-        let options = {new: true};
+    public static async update(req: Request, res: Response) {
+        let data: ICat | null = null;
+        let errors: Object | null = null;
+        res.statusCode = 403;
 
-        CatModel.findByIdAndUpdate(catId, update, options, (err: Error, doc: ICat | null) => {
-            res.statusCode = err ? 403 : 200;
-            res.json({"data": doc, "errors": err});
-        });
+        try {
+            let user = await passport.authenticate('jwt', {session: false});
+            let cat = await CatModel.findById(req.params.id);
+            if (user && cat) {
+                if (user.username === cat.createdBy) {
+                    await cat.update(req.body);
+                    res.statusCode = 200; data = cat;
+                }
+                else res.statusCode = 401;
+            }
+        } catch (err) { errors = err; }
+        res.json({ data: data, errors: errors });
     }
 
-    public static remove(req: Request, res: Response) {
-        let catId = req.params.id;
+    public static async remove(req: Request, res: Response) {
+        let errors: Object | null = null;
+        res.statusCode = 404;
 
-        CatModel.findByIdAndRemove(catId, (err: Error) => {
-            res.statusCode = err ? 404 : 204;
-            res.json({"data": null, "errors": err});
-        })
+        try {
+            let user = await passport.authenticate('jwt', {session: false});
+            let cat = await CatModel.findById(req.params.id);
+            if (user && cat) {
+                if (user.username === cat.createdBy) {
+                    await cat.remove();
+                    res.statusCode = 204;
+                }
+                else res.statusCode = 401;
+            }
+        } catch (err) { errors = err }
+        res.json({ data: null, errors: errors });
     }
 }

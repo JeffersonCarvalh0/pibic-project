@@ -5,9 +5,10 @@ export interface ICat extends Document {
     name: string;
     color: string;
     age: number;
+    createdBy: string
 }
 
-export var CatSchema = new Schema({
+export var CatSchema: Schema = new Schema({
     createdAt: {
         type: Date,
         required: true,
@@ -27,6 +28,11 @@ export var CatSchema = new Schema({
     age: {
         required: true,
         type: Number
+    },
+
+    createdBy: {
+        required: true,
+        type: String
     }
 });
 
