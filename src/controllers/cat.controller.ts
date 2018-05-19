@@ -58,7 +58,7 @@ export class CatController {
                 if (user && cat) {
                     if (user.username === cat.createdBy) {
                         data = await CatModel.findOneAndUpdate(req.params.id, req.body, {new: true});
-                        res.statusCode = 200; data = cat;
+                        res.statusCode = 200;
                     } else res.statusCode = 401;
                 } else if (!user) res.statusCode = 401;
                 res.json({ data: data, errors: errors });
