@@ -32,17 +32,18 @@ export class CatController {
         res.statusCode = 403;
 
         try {
-            let user = await passport.authenticate('jwt', {session: false});
-            if (user) {
-                console.log(user);
-                let cat = req.body;
-                cat.createdBy = user.username;
-                cat = new CatModel(cat);
-                cat = await cat.save();
-                if (cat) { res.statusCode = 201; data = cat; res.location(`cat/${cat._id}`); }
-            } else res.statusCode = 401;
+            await passport.authenticate('jwt', {session: false}, async(err, user) => {
+                if (err) throw err;
+                if (user) {
+                    let cat = req.body;
+                    cat.createdBy = user.username;
+                    cat = new CatModel(cat);
+                    cat = await cat.save();
+                    if (cat) { res.statusCode = 201; data = cat; res.location(`cat/${cat._id}`); }
+                } else res.statusCode = 401;
+                res.json({ data: data, errors: errors });
+            })(req, res);
         } catch (err) { errors = err; }
-        res.json({ data: data, errors: errors });
     }
 
     public static async update(req: Request, res: Response) {
@@ -51,17 +52,18 @@ export class CatController {
         res.statusCode = 403;
 
         try {
-            let user = await passport.authenticate('jwt', {session: false});
-            let cat = await CatModel.findById(req.params.id);
-            if (user && cat) {
-                if (user.username === cat.createdBy) {
-                    await cat.update(req.body);
-                    res.statusCode = 200; data = cat;
-                }
-                else res.statusCode = 401;
-            }
+            await passport.authenticate('jwt', {session: false}, async(err, user) => {
+                if (err) throw err;
+                let cat = await CatModel.findById(req.params.id);
+                if (user && cat) {
+                    if (user.username === cat.createdBy) {
+                        data = await CatModel.findOneAndUpdate(req.params.id, req.body, {new: true});
+                        res.statusCode = 200; data = cat;
+                    } else res.statusCode = 401;
+                } else if (!user) res.statusCode = 401;
+                res.json({ data: data, errors: errors });
+            })(req, res);
         } catch (err) { errors = err; }
-        res.json({ data: data, errors: errors });
     }
 
     public static async remove(req: Request, res: Response) {
@@ -69,16 +71,18 @@ export class CatController {
         res.statusCode = 404;
 
         try {
-            let user = await passport.authenticate('jwt', {session: false});
-            let cat = await CatModel.findById(req.params.id);
-            if (user && cat) {
-                if (user.username === cat.createdBy) {
-                    await cat.remove();
-                    res.statusCode = 204;
+            await passport.authenticate('jwt', {session: false}, async(err, user) => {
+                if (err) throw err;
+                let cat = await CatModel.findById(req.params.id);
+                if (user && cat) {
+                    if (user.username === cat.createdBy) {
+                        await cat.remove();
+                        res.statusCode = 204;
+                    }
+                    else res.statusCode = 401;
                 }
-                else res.statusCode = 401;
-            }
+                res.json({ data: null, errors: errors });
+            })(req, res);
         } catch (err) { errors = err }
-        res.json({ data: null, errors: errors });
     }
 }
