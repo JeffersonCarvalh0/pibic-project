@@ -6,11 +6,6 @@ import { IUser, UserModel } from '../db/user.db';
 
 /** Functions that will process the user's requests for cats */
 export class CatController {
-    /** Check if a cat was created by a user */
-    // public static async checkCreated(): Promise<boolean> {
-    //     return false;
-    // }
-
     public static getAll(req: Request, res: Response) {
         CatModel.find({}, (err: Error, docs: ICat[]) => {
             res.status(200).json({"data": docs, "errors": err});
@@ -23,6 +18,23 @@ export class CatController {
         CatModel.findOne({ name: catName }, (err: Error, cat: ICat) => {
             res.statusCode = err || cat === null ? 404 : 200;
             res.json({"data": cat, "errors": err});
+        });
+    }
+
+    public static getCreatedBy(req: Request, res: Response) {
+        let data: IUser | null = null;
+        let errors: Object | null = null;
+        let catID: string = req.params.id;
+
+        CatModel.findById(catID, (err: Error, cat: ICat) => {
+            if (!cat) res.status(404).json({data: data, errors: err});
+            else {
+                UserModel.findOne({username: cat.createdBy}, (err: Error, user: IUser) => {
+                    res.statusCode = 200;
+                    if (!user) res.json({data: data, errors: err});
+                    else { user.password = ""; res.json({data: user, errors: err}); }
+                });
+            }
         });
     }
 
@@ -83,6 +95,6 @@ export class CatController {
                 }
                 res.json({ data: null, errors: errors });
             })(req, res);
-        } catch (err) { errors = err }
+        } catch (err) { errors = err; }
     }
 }
