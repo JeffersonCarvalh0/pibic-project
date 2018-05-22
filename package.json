@@ -1,7 +1,7 @@
 {
   "name": "ts-rest-boilerplate",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a boilerplate for REST APIs written in TypeScript and built with Express. It comes with some example code.",
   "main": "/dist/server.js",
   "scripts": {
     "build": "tsc",

@@ -2,8 +2,14 @@
 interface IConfig {
     /** The database URI. */
     DBHost: string
+
+    /** morgan settings */
     LOGGER: string
-    SECRET: string // This should not be stored directly here.
+
+    /** Application secret */
+    SECRET: string // The secret used in production should not be stored directly here.
+
+    /** bcrypt settings */
     SALT_ROUNDS: number
 }
 
