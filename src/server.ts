@@ -1,4 +1,5 @@
-import { Server, createServer } from 'http';
+import { Server, createServer } from 'https';
+import fs from 'fs';
 
 import { App, app } from './app';
 
@@ -10,7 +11,10 @@ class MyServer {
     /** Here the server will be bootstraped */
     constructor(app: App) {
         this.app = app;
-        this.instance = createServer(this.app.app);
+        this.instance = createServer({
+            key: fs.readFileSync('localhost.key'),
+            cert: fs.readFileSync('localhost.cert')
+        }, this.app.app);
         this.instance.listen(3000);
         console.log("Started server at port 3000.");
     }

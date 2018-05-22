@@ -8,6 +8,9 @@ import { server } from '../server';
 import { CatModel, ICat } from '../db/cat.db';
 import { UserModel } from '../db/user.db';
 
+// Allow tests with the self-signed certificate
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 chai.use(chaiHttp);
 
 let mockUser = {
