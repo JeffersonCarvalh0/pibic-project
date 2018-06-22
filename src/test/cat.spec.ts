@@ -37,6 +37,7 @@ class CatsTest {
 
     public static async before() {
         try {
+            server.start();
             await CatModel.deleteMany({});
             await UserModel.deleteMany({});
 

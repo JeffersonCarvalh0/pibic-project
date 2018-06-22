@@ -11,25 +11,39 @@ import './auth';
 // Routes
 import { CatsRoutes } from './routes/cat.routes';
 import { AuthRoutes } from './routes/auth.routes';
+import { LocationRoutes } from './routes/location.routes';
 
 /**  This class represents the express app itself. */
 export class App {
     app: express.Application; // The app itself
     router: express.Router; // The router object for modular routes
+    public running: boolean
 
     constructor() {
         // Start the app
         this.app = express();
 
-        // Start middlewares
-        this.middlewares();
-
-        // Start and set up the database
-        this.db()
-
         // Start and setup the router
         this.router = express.Router();
-        this.routes();
+
+        this.running = false;
+    }
+
+    /** Starts the app */
+    public start() {
+        if (this.running) console.log('The app is already started.');
+        else {
+            // Start middlewares
+            this.middlewares();
+
+            // Start and set up the database
+            this.db()
+
+            // Setup the router
+            this.routes();
+
+            this.running = true;
+        }
     }
 
     /** Add the routes to the router */
@@ -40,6 +54,7 @@ export class App {
         // Append routes to the router
         AuthRoutes.create(this.router);
         CatsRoutes.create(this.router);
+        LocationRoutes.create(this.router);
     }
 
     private db() {
@@ -73,6 +88,7 @@ export class App {
     /** Closes all opened connections */
     public shutdown() {
         mongoose.connection.close();
+        this.running = false;
     }
 }
 
