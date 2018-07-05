@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { LocationModel, ILocation } from '../db/location.db';
+import { LocationModel, ILocation, ILocationUser } from '../db/location.db';
 
 export class LocationController {
     public static getAll(req: Request, res: Response) {
@@ -11,26 +11,44 @@ export class LocationController {
 
     public static getById(req: Request, res: Response) {
         let locationId = req.params.id;
-        let data: ILocation;
+        let data: ILocationUser;
 
         LocationModel.findById(locationId, (err: Error, location: ILocation) => {
             res.statusCode = err || location == null ? 404 : 200;
-            if (location) data = location;
+            if (location)
+                data = {
+                    id: location._id,
+                    name: location.name,
+                    latitude: location.coord.coordinates[1],
+                    longitude: location.coord.coordinates[0]
+                };
             res.json({data: data, errors: err});
         });
     }
 
     public static async create(req: Request, res: Response) {
-        let location = req.body;
-        let data: ILocation | null = null;
+        let data: ILocationUser | null = null;
         let errors: Object | null = null;
 
-        location = new LocationModel(location);
+        let location = {
+            name: req.body.name,
+            coord: { type: "Point", coordinates: [req.body.longitude, req.body.latitude] }
+        };
 
-        location.save((err: Error, location: ILocation) => {
+        let locationDocument = new LocationModel(location);
+
+        locationDocument.save((err: Error, location: ILocation) => {
             errors = err;
             res.statusCode = err || location == null ? 401 : 201;
-            if (location) { data = location; res.location(`/location/${location._id}`); }
+            if (location) {
+                data = {
+                    id: location._id,
+                    name: location.name,
+                    latitude: location.coord.coordinates[1],
+                    longitude: location.coord.coordinates[0]
+                };
+                res.location(`/location/${location._id}`);
+            }
             res.json({data: data, errors: errors});
         });
     }

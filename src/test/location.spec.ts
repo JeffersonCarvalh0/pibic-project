@@ -10,8 +10,9 @@ import { LocationModel, ILocation } from '../db/location.db';
 chai.use(chaiHttp);
 
 let mockLocation = {
-    latitude: 123,
-    longitude: 456
+    name: "test",
+    latitude: 1.0,
+    longitude: 1.5
 }
 
 @suite("Locations")
@@ -48,7 +49,7 @@ class LocationsTest {
             assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
             assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
-            LocationsTest.locationId = res.body.data._id;
+            LocationsTest.locationId = res.body.data.id;
         } catch (err) { throw err; }
     }
 
@@ -62,7 +63,7 @@ class LocationsTest {
             assert.equal(res.status, 200, 'The http code is wrong');
             assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
             assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
-            assert.equal(res.body.data._id, LocationsTest.locationId);
+            assert.equal(res.body.data.id, LocationsTest.locationId);
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
     }
