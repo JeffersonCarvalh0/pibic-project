@@ -17,8 +17,9 @@ export class LocationController {
             res.statusCode = err || location == null ? 404 : 200;
             if (location)
                 data = {
-                    id: location._id,
+                    _id: location._id,
                     name: location.name,
+                    content: location.content,
                     latitude: location.coord.coordinates[1],
                     longitude: location.coord.coordinates[0]
                 };
@@ -39,11 +40,12 @@ export class LocationController {
 
         locationDocument.save((err: Error, location: ILocation) => {
             errors = err;
-            res.statusCode = err || location == null ? 401 : 201;
+            res.statusCode = err || location == null ? 406 : 201;
             if (location) {
                 data = {
-                    id: location._id,
+                    _id: location._id,
                     name: location.name,
+                    content: location.content,
                     latitude: location.coord.coordinates[1],
                     longitude: location.coord.coordinates[0]
                 };

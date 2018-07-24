@@ -140,7 +140,5 @@ class CatsTest {
         } catch (err) { throw err; }
     }
 
-    public static after() {
-        server.shutdown();
-    }
+    public static after() { server.shutdown(); }
 }

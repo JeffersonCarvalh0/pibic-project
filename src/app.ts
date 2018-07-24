@@ -9,9 +9,10 @@ import config from './config';
 import './auth';
 
 // Routes
-import { CatsRoutes } from './routes/cat.routes';
 import { AuthRoutes } from './routes/auth.routes';
+import { CatsRoutes } from './routes/cat.routes';
 import { LocationRoutes } from './routes/location.routes';
+import { ContentRoutes } from './routes/content.routes';
 
 /**  This class represents the express app itself. */
 export class App {
@@ -55,6 +56,7 @@ export class App {
         AuthRoutes.create(this.router);
         CatsRoutes.create(this.router);
         LocationRoutes.create(this.router);
+        ContentRoutes.create(this.router);
     }
 
     private db() {

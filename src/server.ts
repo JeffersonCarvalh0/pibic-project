@@ -40,6 +40,7 @@ class MyServer {
         this.app.shutdown();
         this.instance.close();
         this.running = false;
+        console.log('Server is now offline.');
     }
 }
 

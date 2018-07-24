@@ -17,7 +17,7 @@ let mockLocation = {
 
 @suite("Locations")
 class LocationsTest {
-    public static locationId: number;
+    public static locationId: string;
 
     public static async before() {
         try { server.start(); await LocationModel.deleteMany({}); }
@@ -32,7 +32,7 @@ class LocationsTest {
             .set('Content-Type', 'application/json');
 
             assert.equal(res.status, 200, 'The http code is wrong');
-            assert.typeOf(res.body.data, 'array', `The response is ill-formed: ${res.body}`);
+            assert.typeOf(res.body.data, 'array', `The response is ill-formed: ${res.body.data}`);
             assert.lengthOf(res.body.data, 0, 'There are elements in the response.');
         } catch (err) { throw err; }
     }
@@ -49,7 +49,7 @@ class LocationsTest {
             assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
             assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
-            LocationsTest.locationId = res.body.data.id;
+            LocationsTest.locationId = res.body.data._id;
         } catch (err) { throw err; }
     }
 
@@ -63,7 +63,7 @@ class LocationsTest {
             assert.equal(res.status, 200, 'The http code is wrong');
             assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
             assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
-            assert.equal(res.body.data.id, LocationsTest.locationId);
+            assert.equal(res.body.data._id, LocationsTest.locationId);
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
     }

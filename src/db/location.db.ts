@@ -1,14 +1,18 @@
 import mongoose from 'mongoose';
 import { Schema, Document, Model, model } from 'mongoose';
 
+import { IContent, ContentSchema } from './content.db';
+
 export interface ILocation extends Document {
     name: string,
     coord: { type: string, coordinates: number[] }
+    content: IContent
 }
 
 export interface ILocationUser {
-    id: string,
+    _id: string,
     name: string,
+    content: IContent | null,
     latitude: number,
     longitude: number
 }
@@ -24,10 +28,10 @@ export var LocationSchema: Schema = new Schema({
         coordinates: [Number], // [longitude, latitude]
     },
 
-    createdAt: {
-        type: Date,
-        required: true,
-        default: Date.now
+    content: {
+        type: Schema.Types.ObjectId,
+        ref: 'Content',
+        default: null
     },
 });
 LocationSchema.index({ "coord": "2dsphere" });
