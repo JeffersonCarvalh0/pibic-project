@@ -35,7 +35,7 @@ class ContentsTest {
             .post('/location')
             .set('Content-Type', 'application/json')
             .send(mockLocation);
-            ContentsTest.locationId = res.body.id;
+            ContentsTest.locationId = res.body._id;
         } catch (err) { throw err; }
     }
 

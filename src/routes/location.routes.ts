@@ -6,6 +6,8 @@ export class LocationRoutes {
     public static create(router: Router) {
         router.get("/location", (req: Request, res: Response) => LocationController.getAll(req, res));
         router.get("/location/:id", (req: Request, res: Response) => LocationController.getById(req, res));
+        router.put("/location/:locationId/:contentId", (req: Request, res: Response) =>
+            LocationController.setContent(req, res));
         router.post("/location", (req: Request, res: Response) => LocationController.create(req, res));
         router.delete("/location/:id", (req: Request, res: Response) => LocationController.remove(req, res));
     }

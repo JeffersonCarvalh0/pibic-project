@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { LocationModel, ILocation, ILocationUser } from '../db/location.db';
+import { ContentModel } from '../db/content.db';
 
 export class LocationController {
     public static getAll(req: Request, res: Response) {
@@ -55,6 +56,35 @@ export class LocationController {
         });
     }
 
+    public static async setContent(req: Request, res: Response) {
+        let errors: Object | null = null;
+        let data: ILocationUser | null = null;
+        let statusCode = 406;
+
+        try {
+            let location = await LocationModel.findById(req.params.locationId);
+            let content = await ContentModel.findById(req.params.contentId);
+
+            if (location && content) {
+                location.content = req.params.contentId;
+                await location.save();
+                statusCode = 201;
+
+                location = await location.populate('content').execPopulate();
+
+                data = {
+                    _id: location._id,
+                    name: location.name,
+                    content: location.content,
+                    latitude: location.coord.coordinates[1],
+                    longitude: location.coord.coordinates[0]
+                }
+
+            } else statusCode = 404;
+        } catch (err) { errors = err; }
+        res.json({ data: data, errors: errors });
+    }
+
     public static async remove(req: Request, res: Response) {
         let errors: Object | null = null;
         res.statusCode = 404;
@@ -63,7 +93,7 @@ export class LocationController {
             let location = await LocationModel.findById(req.params.id);
             if (location) { await location.remove(); res.statusCode = 204; }
             else res.statusCode = 401;
-            res.json({data: null, errors: errors});
         } catch (err) { errors = err; }
+        res.json({data: null, errors: errors});
     }
 }

@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 
 import { server } from '../server';
 import { LocationModel, ILocation } from '../db/location.db';
+import { ContentModel } from '../db/content.db';
 
 chai.use(chaiHttp);
 
@@ -15,12 +16,29 @@ let mockLocation = {
     longitude: 1.5
 }
 
+let mockContent = {
+    title: "test",
+    description: "An awesome test!"
+}
+
 @suite("Locations")
 class LocationsTest {
     public static locationId: string;
+    public static contentId: string;
 
     public static async before() {
-        try { server.start(); await LocationModel.deleteMany({}); }
+        try {
+            server.start();
+            await LocationModel.deleteMany({});
+            await ContentModel.deleteMany({});
+
+            let res = await chai.request(server.instance)
+            .post(`/content`)
+            .set('Content-Type', 'application/json')
+            .send(mockContent);
+
+            LocationsTest.contentId = res.body.data._id;
+        }
         catch (err) { throw err; }
     }
 
@@ -64,6 +82,22 @@ class LocationsTest {
             assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
             assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
             assert.equal(res.body.data._id, LocationsTest.locationId);
+            assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
+        } catch (err) { throw err; }
+    }
+
+    @test("/PUT location - should add a content to the location")
+    public async addContent() {
+        try {
+            let res = await chai.request(server.instance)
+            .put(`/location/${LocationsTest.locationId}/${LocationsTest.contentId}`)
+            .set('Content-Type', 'application/json');
+
+            assert.equal(res.status, 200, 'The http code is wrong')
+            assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
+            assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
+            assert.equal(res.body.data._id, LocationsTest.locationId);
+            assert.equal(res.body.data.content._id, LocationsTest.contentId, 'The id of the content is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
     }
