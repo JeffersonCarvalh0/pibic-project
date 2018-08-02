@@ -14,7 +14,7 @@ export class ContentController {
 
         ContentModel.findById(contentId, (err: Error, content: IContent) => {
             res.statusCode = err || content == null ? 404 : 200;
-            if (content) res.json({ data: content, errors: err });
+            res.json({ data: content, errors: err });
         });
     }
 

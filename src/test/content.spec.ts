@@ -64,7 +64,7 @@ class ContentsTest {
             assert.equal(res.body.data.title, mockContent.title, 'The title is wrong');
             assert.equal(res.body.data.description, mockContent.description, 'The description is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
-            ContentsTest.locationId = res.body.data._id;
+            ContentsTest.contentId = res.body.data._id;
         } catch(err) { throw err; }
     }
 
@@ -72,7 +72,7 @@ class ContentsTest {
     public async getById() {
         try {
             let res = await chai.request(server.instance)
-            .post(`content/${ContentsTest.contentId}`)
+            .get(`/content/${ContentsTest.contentId}`)
             .set('Content-Type', 'application/json');
 
             assert.equal(res.status, 200, 'The http code is wrong');
@@ -101,7 +101,7 @@ class ContentsTest {
     public async delete() {
         try {
             let res = await chai.request(server.instance)
-            .del(`content/${ContentsTest.contentId}`)
+            .del(`/content/${ContentsTest.contentId}`)
             .set('Content-Type', 'applciation/json');
 
             assert.equal(res.status, 204, 'The http code is wrong');
