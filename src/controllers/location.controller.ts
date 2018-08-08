@@ -3,10 +3,24 @@ import { Request, Response } from 'express';
 import { LocationModel, ILocation, ILocationUser } from '../db/location.db';
 import { ContentModel } from '../db/content.db';
 
+async function toUser(doc: ILocation): Promise<ILocationUser> {
+    doc = await doc.populate('content').execPopulate();
+
+    let data: ILocationUser = {
+        _id: doc._id,
+        name: doc.name,
+        content: doc.content,
+        latitude: doc.coord.coordinates[1],
+        longitude: doc.coord.coordinates[0]
+    };
+
+    return new Promise<ILocationUser>((resolve) => resolve(data));
+}
+
 export class LocationController {
-    public static getAll(req: Request, res: Response) {
-        LocationModel.find({}, (err: Error, docs: ILocation[])=> {
-            res.status(200).json({data: docs, errors: err});
+    public static async getAll(req: Request, res: Response) {
+        LocationModel.find({}, async(err: Error, docs: ILocation[]) => {
+            res.status(200).json({ data: await Promise.all(docs.map(toUser)), errors: err });
         });
     }
 
@@ -14,16 +28,9 @@ export class LocationController {
         let locationId = req.params.id;
         let data: ILocationUser;
 
-        LocationModel.findById(locationId, (err: Error, location: ILocation) => {
+        LocationModel.findById(locationId, async(err: Error, location: ILocation) => {
             res.statusCode = err || location == null ? 404 : 200;
-            if (location)
-                data = {
-                    _id: location._id,
-                    name: location.name,
-                    content: location.content,
-                    latitude: location.coord.coordinates[1],
-                    longitude: location.coord.coordinates[0]
-                };
+            if (location) data = await toUser(location);
             res.json({data: data, errors: err});
         });
     }
@@ -39,17 +46,11 @@ export class LocationController {
 
         let locationDocument = new LocationModel(location);
 
-        locationDocument.save((err: Error, location: ILocation) => {
+        locationDocument.save(async(err: Error, location: ILocation) => {
             errors = err;
             res.statusCode = err || location == null ? 406 : 201;
             if (location) {
-                data = {
-                    _id: location._id,
-                    name: location.name,
-                    content: location.content,
-                    latitude: location.coord.coordinates[1],
-                    longitude: location.coord.coordinates[0]
-                };
+                data = await toUser(location);
                 res.location(`/location/${location._id}`);
             }
             res.json({data: data, errors: errors});
@@ -69,17 +70,8 @@ export class LocationController {
                 location.content = req.params.contentId;
                 await location.save();
                 statusCode = 201;
-
                 location = await location.populate('content').execPopulate();
-
-                data = {
-                    _id: location._id,
-                    name: location.name,
-                    content: location.content,
-                    latitude: location.coord.coordinates[1],
-                    longitude: location.coord.coordinates[0]
-                }
-
+                data = await toUser(location);
             } else statusCode = 404;
         } catch (err) { errors = err; }
         res.json({ data: data, errors: errors });
