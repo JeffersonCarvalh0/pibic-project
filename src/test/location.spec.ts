@@ -5,7 +5,7 @@ import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 
 import { server } from '../server';
-import { LocationModel, ILocation } from '../db/location.db';
+import { LocationModel } from '../db/location.db';
 import { ContentModel } from '../db/content.db';
 
 chai.use(chaiHttp);
@@ -51,7 +51,7 @@ class LocationsTest {
 
             assert.equal(res.status, 200, 'The http code is wrong');
             assert.typeOf(res.body.data, 'array', `The response is ill-formed: ${res.body.data}`);
-            assert.lengthOf(res.body.data, 0, 'There are elements in the response.');
+            assert.lengthOf(res.body.data, 0, 'There are elements in the response');
         } catch (err) { throw err; }
     }
 
@@ -81,7 +81,7 @@ class LocationsTest {
             assert.equal(res.status, 200, 'The http code is wrong');
             assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
             assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
-            assert.equal(res.body.data._id, LocationsTest.locationId);
+            assert.equal(res.body.data._id, LocationsTest.locationId, 'The id is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
     }
@@ -89,7 +89,7 @@ class LocationsTest {
     @test("/PUT location - should add a content to the location")
     public async addContent() {
         try {
-            let res = await chai.request(server.instance)
+            const res = await chai.request(server.instance)
             .put(`/location/${LocationsTest.locationId}/${LocationsTest.contentId}`)
             .set('Content-Type', 'application/json');
 

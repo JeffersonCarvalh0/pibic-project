@@ -1,20 +1,20 @@
 import mongoose from 'mongoose';
 import { Schema, Document, Model, model } from 'mongoose';
 
-import { IContent, ContentSchema } from './content.db';
+import { IContent } from './content.db';
 
 export interface ILocation extends Document {
-    name: string,
-    coord: { type: string, coordinates: number[] }
-    content: IContent
+    name: string;
+    coord: { type: string, coordinates: number[] };
+    content: IContent;
 }
 
 export interface ILocationUser {
-    _id: string,
-    name: string,
-    content: IContent | null,
-    latitude: number,
-    longitude: number
+    _id: string;
+    name: string;
+    content: IContent | null;
+    latitude: number;
+    longitude: number;
 }
 
 export var LocationSchema: Schema = new Schema({
