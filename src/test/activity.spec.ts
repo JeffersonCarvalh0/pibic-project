@@ -122,8 +122,9 @@ class ActivitiesTest {
     public async remove() {
         try {
             const res = await chai.request(server.instance)
-            .del(`activity/${ActivitiesTest.activityId}`)
-            .set('Content-Type', 'application/json')
+            .del(`/activity/${ActivitiesTest.activityId}`)
+            .set('Content-Type', 'application/json');
+            console.log("howdy, request sent");
 
             assert.equal(res.status, 204, 'The http code is wrong');
             assert.typeOf(res.body.data, 'undefined', `${res.body.data}`);
@@ -131,7 +132,5 @@ class ActivitiesTest {
         } catch (err) { throw err; }
     }
 
-    public static after() {
-        server.shutdown();
-    }
+    public static after() { server.shutdown(); }
 }

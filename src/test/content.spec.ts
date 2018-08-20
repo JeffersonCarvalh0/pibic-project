@@ -98,7 +98,7 @@ class ContentsTest {
     }
 
     @test("/DELETE content - Should delete a content from the database")
-    public async delete() {
+    public async remove() {
         try {
             let res = await chai.request(server.instance)
             .del(`/content/${ContentsTest.contentId}`)
