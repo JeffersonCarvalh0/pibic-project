@@ -11,7 +11,6 @@ import './auth';
 // Routes
 import { AuthRoutes } from './routes/auth.routes';
 import { ActivityRoutes } from './routes/activity.routes';
-import { CatsRoutes } from './routes/cat.routes';
 import { ContentRoutes } from './routes/content.routes';
 import { LocationRoutes } from './routes/location.routes';
 
@@ -54,8 +53,7 @@ export class App {
         this.app.use(this.router);
 
         // Append routes to the router
-        AuthRoutes.create(this.router);
-        CatsRoutes.create(this.router);
+        // AuthRoutes.create(this.router);
         LocationRoutes.create(this.router);
         ContentRoutes.create(this.router);
         ActivityRoutes.create(this.router);
@@ -85,8 +83,8 @@ export class App {
         }
 
         // Passport
-        this.app.use(passport.initialize());
-        this.app.use('/testAuth', passport.authenticate('jwt', { session: false }));
+        // this.app.use(passport.initialize());
+        // this.app.use('/testAuth', passport.authenticate('jwt', { session: false }));
     }
 
     /** Closes all opened connections */
