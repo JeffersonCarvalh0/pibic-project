@@ -15,7 +15,7 @@ interface IConfig {
 
 /** Configurations for development */
 const dev: IConfig = {
-    DBHost: 'mongodb://localhost/cats',
+    DBHost: 'mongodb://localhost/pibic',
     LOGGER: 'dev',
     SECRET: 'kittens',
     SALT_ROUNDS: 10
@@ -23,7 +23,7 @@ const dev: IConfig = {
 
 /** Configurations for tests */
 const test: IConfig = {
-    DBHost: 'mongodb://localhost/cats-test',
+    DBHost: 'mongodb://localhost/pibic-test',
     LOGGER: '',
     SECRET: 'kittens',
     SALT_ROUNDS: 10
@@ -31,7 +31,7 @@ const test: IConfig = {
 
 /** Configurations for production */
 const prod: IConfig = {
-    DBHost: 'mongodb://localhost/cats',
+    DBHost: 'mongodb://localhost/pibic',
     LOGGER: 'combined',
     SECRET: 'kittens',
     SALT_ROUNDS: 12

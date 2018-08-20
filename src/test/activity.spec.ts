@@ -124,7 +124,6 @@ class ActivitiesTest {
             const res = await chai.request(server.instance)
             .del(`/activity/${ActivitiesTest.activityId}`)
             .set('Content-Type', 'application/json');
-            console.log("howdy, request sent");
 
             assert.equal(res.status, 204, 'The http code is wrong');
             assert.typeOf(res.body.data, 'undefined', `${res.body.data}`);
