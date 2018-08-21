@@ -31,9 +31,9 @@ const test: IConfig = {
 
 /** Configurations for production */
 const prod: IConfig = {
-    DBHost: 'mongodb://localhost/pibic',
+    DBHost: process.env.MONGOLAB_URI || "",
     LOGGER: 'combined',
-    SECRET: 'kittens',
+    SECRET: process.env.SECRET || "kittens",
     SALT_ROUNDS: 12
 }
 
