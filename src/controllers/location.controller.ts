@@ -79,13 +79,14 @@ export class LocationController {
 
     public static async remove(req: Request, res: Response) {
         let errors: Object | null = null;
-        res.statusCode = 404;
+        res.statusCode = 406;
 
         try {
             let location = await LocationModel.findById(req.params.id);
-            if (location) { await location.remove(); res.statusCode = 204; }
-            else res.statusCode = 401;
+            if (location) await location.remove(), res.statusCode = 204;
+            else res.statusCode = 404;
         } catch (err) { errors = err; }
-        res.json({data: null, errors: errors});
+        if (res.statusCode == 204) res.json();
+        else res.json({data: null, errors: errors});
     }
 }

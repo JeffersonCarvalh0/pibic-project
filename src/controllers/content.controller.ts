@@ -28,16 +28,23 @@ export class ContentController {
     }
 
     public static update(req: Request, res: Response) {
-        ContentModel.findOneAndUpdate(req.params.id, req.body, { new: true }, (err: Error, content: IContent | null) => {
+        const conditions = { _id: req.params.id };
+        ContentModel.findOneAndUpdate(conditions, req.body, { new: true }, (err: Error, content: IContent | null) => {
             res.statusCode = err || content == null ? 406 : 200;
             res.json({ data: content, errors: err });
         });
     }
 
-    public static remove(req: Request, res: Response) {
-        ContentModel.findByIdAndRemove(req.params.id, (err: Error) => {
-            res.statusCode = err ? 404 : 204;
-            res.json({ data: null, errors: err });
-        });
+    public static async remove(req: Request, res: Response) {
+        let errors: Object | null = null;
+        res.statusCode = 406;
+
+        try {
+            let content = await ContentModel.findById(req.params.id);
+            if (content) await content.remove(), res.statusCode = 204;
+            else res.statusCode = 404;
+        } catch (err) { errors = err; }
+        if (res.statusCode == 204) res.json();
+        else res.json({ data: null, errors: errors });
     }
 }
