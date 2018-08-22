@@ -29,7 +29,7 @@ class MyServer {
         else {
             this.instance = createServer(this.app.app);
             this.app.start();
-            this.instance.listen(3000);
+            this.instance.listen(process.env.PORT || 3000);
             console.log("Started server at port 3000.");
             this.running = true;
         }
