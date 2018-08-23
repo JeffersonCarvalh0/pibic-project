@@ -394,7 +394,6 @@ Updates a content in the database.
   The `data` field in the successful response will be an empty array if there are no entries in the database.
 
 
-
 **Show a single Content**
 ----
   Returns JSON data about a single Content.
@@ -467,13 +466,12 @@ Updates a content in the database.
 
 * **Notes:**
 
-  The `id` parameter must be an hexadecimal number.
-
+  The `id` parameter must be an MongoDB `ObjectId`.
 
 
 **Create a Content**
 ----
-  Creates a new Content object in the database.
+Creates a new Content object in the database.
 
 * **URL**
 
@@ -540,7 +538,7 @@ Updates a content in the database.
     }
     ```
 
-  * **Sample Call:**
+* **Sample Call:**
 
     ```
     curl --header "Content-Type: application/json" \
@@ -549,15 +547,15 @@ Updates a content in the database.
     https://pibic-project.herokuapp.com/content
     ```
 
-  * **Notes:**
+* **Notes:**
 
-    The `title` parameter in the request body is required. Other parameters
-    different than `title` and `description` are ignored.
+  The `title` parameter in the request body is required. Other parameters
+  different than `title` and `description` are ignored.
 
 
 **Update a Content**
 ----
-  Updates a content in the database.
+Updates a content in the database.
 
 * **URL**
 
@@ -624,7 +622,7 @@ Updates a content in the database.
 
   * **Notes:**
 
-    The `id` paramater at the url must be an hexadecimal value.
+    The `id` paramater at the url must be an MongoDB `ObjectId`.
 
 
 **Delete a Content**
@@ -691,4 +689,4 @@ Updates a content in the database.
 
   * **Notes:**
 
-    The `id` paramater at the url must be an hexadecimal value.
+    The `id` paramater at the url must be an MongoDB `ObjectId`.
