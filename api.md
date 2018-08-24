@@ -1,3 +1,4 @@
+# Activities
 **Show all Activities**
 ----
   Returns all Activities in the database.
@@ -351,7 +352,7 @@ Deletes an Activity from the database.
 
   The `id` paramater at the url must be an MongoDB `ObjectId`.
 
-
+# Contents
 **Show all Contents**
 ----
   Returns all Contents in the database.
@@ -698,6 +699,7 @@ Updates a content in the database.
   The `id` paramater at the url must be an MongoDB `ObjectId`.
 
 
+# Locations
 **Show all Locations**
 ----
   Returns all Locations in the database.
