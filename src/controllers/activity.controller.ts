@@ -29,7 +29,7 @@ export class ActivityController {
     public static update(req: Request, res: Response) {
         const conditions = { _id: req.params.id };
         ActivityModel.findOneAndUpdate(req.params.id, req.body, { new: true }, (err: Error, activity: IActivity | null) => {
-            res.statusCode = err ? 404 : 201;
+            res.statusCode = err ? 404 : 200;
             res.json({ data: activity, errors: err });
         });
     }

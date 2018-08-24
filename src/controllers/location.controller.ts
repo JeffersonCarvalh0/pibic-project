@@ -26,7 +26,7 @@ export class LocationController {
 
     public static getById(req: Request, res: Response) {
         let locationId = req.params.id;
-        let data: ILocationUser;
+        let data: ILocationUser | null = null;
 
         LocationModel.findById(locationId, async(err: Error, location: ILocation) => {
             res.statusCode = err || location == null ? 404 : 200;
@@ -41,27 +41,28 @@ export class LocationController {
 
         let location = {
             name: req.body.name,
-            coord: { type: "Point", coordinates: [req.body.longitude, req.body.latitude] }
+            coord: { type: "Point", coordinates: [req.body.longitude, req.body.latitude] },
+            content: req.body.content
         };
 
         let locationDocument = new LocationModel(location);
 
-        locationDocument.save(async(err: Error, location: ILocation) => {
-            errors = err;
-            res.statusCode = err || location == null ? 406 : 201;
-            if (location) {
-                data = await toUser(location);
-                res.location(`/location/${location._id}`);
+        res.statusCode = 406;
+        try {
+            locationDocument = await locationDocument.save();
+            if (locationDocument) {
+                res.statusCode = 201;
+                data = await toUser(locationDocument);
             }
-            res.json({data: data, errors: errors});
-        });
+        } catch (err) { errors = err; }
+        res.json({ data: data, errors: errors });
     }
 
     public static async setContent(req: Request, res: Response) {
         let errors: Object | null = null;
         let data: ILocationUser | null = null;
-        let statusCode = 406;
 
+        res.statusCode = 404;
         try {
             let location = await LocationModel.findById(req.params.locationId);
             let content = await ContentModel.findById(req.params.contentId);
@@ -69,10 +70,9 @@ export class LocationController {
             if (location && content) {
                 location.content = req.params.contentId;
                 await location.save();
-                statusCode = 201;
-                location = await location.populate('content').execPopulate();
+                res.statusCode = 200;
                 data = await toUser(location);
-            } else statusCode = 404;
+            }
         } catch (err) { errors = err; }
         res.json({ data: data, errors: errors });
     }

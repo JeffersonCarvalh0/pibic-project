@@ -122,7 +122,7 @@ class ActivitiesTest {
                 ]
             });
 
-            assert.equal(res.status, 201, 'The http code is wrong');
+            assert.equal(res.status, 200, 'The http code is wrong');
             assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong');
             assert.equal(res.body.data.statement, "statement updated", 'The statement is wrong');
             assert.equal(res.body.data.locations[0], ActivitiesTest.locationId, 'The first id is wrong');
