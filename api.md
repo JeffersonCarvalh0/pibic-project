@@ -1,7 +1,26 @@
-# Activities
-**Show all Activities**
-----
-  Returns all Activities in the database.
+# Table of Contents
+* [Activities](#activities)
+    * [Show all Activities](#show-all-activities)
+    * [Show a single Activity](#show-a-single-activity)
+    * [Create an Activity](#create-an-activity)
+    * [Update an Activity](#update-an-activity)
+    * [Delete an Activity](#delete-an-activity)
+* [Contents](#contents)
+    * [Show all Contents](#show-all-contents)
+    * [Show a single Content](#show-a-single-content)
+    * [Create an Content](#create-a-content)
+    * [Update an Content](#update-a-content)
+    * [Delete an Content](#delete-a-content)
+* [Locations](#locations)
+    * [Show all Locations](#show-all-locations)
+    * [Show a single Location](#show-a-single-location)
+    * [Create an Location](#create-a-location)
+    * [Update an Location](#update-a-location)
+    * [Delete an Location](#delete-a-location)
+
+# **Activities**
+## **Show all Activities**
+Returns all Activities in the database.
 
 * **URL**
 
@@ -49,8 +68,7 @@
   The `data` field in the successful response will be an empty array if there are no entries in the database.
 
 
-**Show a single Activity**
-----
+## **Show a single Activity**
 Returns JSON data about a single Activity.
 
 * **URL**
@@ -125,9 +143,8 @@ None
   The `id` parameter must be a MongoDB `ObjectId`.
 
 
-**Create an Activity**
-----
-  Creates a new Activity object in the database.
+## **Create an Activity**
+Creates a new Activity object in the database.
 
 * **URL**
 
@@ -212,8 +229,7 @@ None
   `locations` property is an array of Location MongoDB `ObjectId`s.
 
 
-**Update an Activity**
-----
+## **Update an Activity**
 Updates an Activity from the database.
 
 * **URL**
@@ -286,8 +302,7 @@ Updates an Activity from the database.
   The `id` paramater at the url must be an MongoDB `ObjectId`.
 
 
-**Delete an Activity**
-----
+## **Delete an Activity**
 Deletes an Activity from the database.
 
 * **URL**
@@ -352,7 +367,7 @@ Deletes an Activity from the database.
 
   The `id` paramater at the url must be an MongoDB `ObjectId`.
 
-# Contents
+# **Contents**
 **Show all Contents**
 ----
   Returns all Contents in the database.
@@ -618,18 +633,18 @@ Updates a content in the database.
     }
     ```
 
-  * **Sample Call:**
+* **Sample Call:**
 
-    ```
-    curl --header "Content-Type: application/json" \
-    --request PUT \
-    --data '{"title":"edited title"}' \
-    https://pibic-project.herokuapp.com/content/5b7d60ad6e4f7b17385325f1
-    ```
+  ```
+  curl --header "Content-Type: application/json" \
+  --request PUT \
+  --data '{"title":"edited title"}' \
+  https://pibic-project.herokuapp.com/content/5b7d60ad6e4f7b17385325f1
+  ```
 
-  * **Notes:**
+* **Notes:**
 
-    The `id` paramater at the url must be an MongoDB `ObjectId`.
+  The `id` paramater at the url must be an MongoDB `ObjectId`.
 
 
 **Delete a Content**
@@ -699,7 +714,7 @@ Updates a content in the database.
   The `id` paramater at the url must be an MongoDB `ObjectId`.
 
 
-# Locations
+# **Locations**
 **Show all Locations**
 ----
   Returns all Locations in the database.
@@ -750,7 +765,7 @@ Updates a content in the database.
   The `data` field in the successful response will be an empty array if there are no entries in the database.
 
 
-**Show a single Content**
+**Show a single Location**
 ----
   Returns JSON data about a single Location.
 
