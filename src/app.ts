@@ -9,10 +9,10 @@ import config from './config';
 import './auth';
 
 // Routes
-import { AuthRoutes } from './routes/auth.routes';
 import { ActivityRoutes } from './routes/activity.routes';
 import { ContentRoutes } from './routes/content.routes';
 import { LocationRoutes } from './routes/location.routes';
+import { UserRoutes } from './routes/user.routes';
 
 /**  This class represents the express app itself. */
 export class App {
@@ -53,10 +53,10 @@ export class App {
         this.app.use(this.router);
 
         // Append routes to the router
-        AuthRoutes.create(this.router);
         LocationRoutes.create(this.router);
         ContentRoutes.create(this.router);
         ActivityRoutes.create(this.router);
+        UserRoutes.create(this.router);
     }
 
     private db() {
@@ -84,7 +84,6 @@ export class App {
 
         // Passport
         this.app.use(passport.initialize());
-        this.app.use('/testAuth', passport.authenticate('jwt', { session: false }));
     }
 
     /** Closes all opened connections */

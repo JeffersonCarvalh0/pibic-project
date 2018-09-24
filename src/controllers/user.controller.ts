@@ -6,7 +6,7 @@ import config from '../config';
 import { IUser, UserModel } from '../db/user.db';
 
 /** Functions to process the authentication requests */
-export class AuthController {
+export class UserController {
     public static login(req: Request, res: Response) {
         passport.authenticate('local', { session: false, failureFlash: true }, (err: Error, user: IUser) => {
             res.statusCode = err || !user ? 400 : 200;
@@ -15,17 +15,20 @@ export class AuthController {
         })(req, res);
     }
 
-    public static register(req: Request, res: Response) {
-        let user = new UserModel(req.body);
+    public static async register(req: Request, res: Response) {
+        let user: IUser = new UserModel(req.body);
 
-        user.save((err: Error) => {
-            res.statusCode = err ? 403 : 201;
-            let data: string = err ? "" : "success";
-            res.json({data: data, errors: err});
+        user.save((err: Error, doc: IUser) => {
+            res.statusCode = err ? 406 : 201;
+            doc.password = "";
+            res.json({data: doc, errors: err});
         });
     }
 
     public static testAuth(req: Request, res: Response) {
-        res.status(200).json({ data: req.user, errors: [] });
+        passport.authenticate('jwt', { session: false }, (err: Error, user: IUser) => {
+            res.statusCode = user ? 200 : 401;
+            res.json({ data: req.user, errors: [] });
+        })(req, res);
     }
 }

@@ -63,7 +63,7 @@ class ActivitiesTest {
         } catch (err) { throw err; }
     }
 
-    @test("/GET activity - Get all activities in the database")
+    @test("/GET activity - Should get all activities in the database")
     public async getAll() {
         try {
             const res = await chai.request(server.instance)
@@ -92,7 +92,7 @@ class ActivitiesTest {
         } catch (err) { throw err; }
     }
 
-    @test("/GET activity - should get an activity by id")
+    @test("/GET activity - Should get an activity by id")
     public async getById() {
         try {
             const res = await chai.request(server.instance)
@@ -107,7 +107,7 @@ class ActivitiesTest {
         } catch (err) { throw err; }
     }
 
-    @test("/PUT activity - should update an activity")
+    @test("/PUT activity - Should update an activity")
     public async update() {
         try {
             const res = await chai.request(server.instance)
@@ -133,7 +133,7 @@ class ActivitiesTest {
         } catch (err) { throw err; }
     }
 
-    @test("/DELETE activity - should delete an activity from the database")
+    @test("/DELETE activity - Should delete an activity from the database")
     public async remove() {
         try {
             const res = await chai.request(server.instance)
