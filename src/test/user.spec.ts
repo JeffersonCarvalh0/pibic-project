@@ -109,7 +109,7 @@ class UsersTest {
         } catch (err) { throw err; }
     }
 
-    @test("/POST user - Log in")
+    @test("/POST user - Should log in")
     public async login() {
         try {
             const res = await chai.request(server.instance)
@@ -122,7 +122,7 @@ class UsersTest {
         } catch (err) { throw err; }
     }
 
-    @test("/POST user - Test authentication")
+    @test("/POST user - Should test authentication")
     public async testAuth() {
         try {
             const res = await chai.request(server.instance)
@@ -131,6 +131,19 @@ class UsersTest {
             .set('Content-Type', 'applicaiton/json');
 
             assert.equal(res.status, 200, 'The http code is wrong');
+        } catch (err) { throw err; }
+    }
+
+    @test("/DELTE user - Should delete an logged user")
+    public async remove() {
+        try {
+            const res = await chai.request(server.instance)
+            .del(`/user`)
+            .set('Authorization', `Bearer ${UsersTest.token}`)
+            .set('Content-Type', 'application/json')
+
+            assert.equal(res.status, 201, 'The http code is wrong')
+            assert.equal(await UserModel.findById(UsersTest.userId), undefined, 'The user is not undefined');
         } catch (err) { throw err; }
     }
 

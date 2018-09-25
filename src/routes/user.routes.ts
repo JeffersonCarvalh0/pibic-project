@@ -7,5 +7,6 @@ export class UserRoutes {
         router.post('/login', (req: Request, res: Response) => UserController.login(req, res));
         router.post('/user', (req: Request, res: Response) => UserController.register(req, res));
         router.get('/testAuth', (req: Request, res: Response) => UserController.testAuth(req, res));
+        router.delete('/user', (req: Request, res: Response) => UserController.remove(req, res));
     }
 }
