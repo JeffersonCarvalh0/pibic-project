@@ -17,6 +17,11 @@
     * [Create an Location](#create-a-location)
     * [Update an Location](#update-a-location)
     * [Delete an Location](#delete-a-location)
+* [Users](#users)
+    * [Log in](#log-in)
+    * [Create an User](#create-an-user)
+    * [Get logged User](#get-logged-user)
+    * [Delete an User](#delete-an-user)
 
 # **Activities**
 ## **Show all Activities**
@@ -1119,3 +1124,231 @@ Updates a location, assigning a content to it.
 * **Notes:**
 
   The `id` paramater at the url must be an MongoDB `ObjectId`.
+
+
+# **Users**
+## **Log in**
+Log in an user registered in the database
+
+* **URL**
+
+  /login
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+    ```
+    {
+        "username": "user",
+        "password": "1234"
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+    ```
+    {
+        "data": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7ImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IkRvZSJ9LCJfaWQiOiI1YmFhNmQ5ZjQ2YjhlODI3ZDY3OTA3MzQiLCJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRLZTVEMkRNUS9pdTgwNmYzV0Z5ME1PMzFTb1kuT0lrNjdWc2NGQjdvUUozSWdYY2xhTHQxUyIsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMjVUMTc6MTc6MTkuMjQ5WiIsIl9fdiI6MCwiaWF0IjoxNTM3OTYyNzk5LCJleHAiOjE1Mzc5NjM2OTl9.U-Tg0U_r1uzFrSgO9oIrieyKK7Tw5-T8BnmRsb5shI8"
+        },
+          "errors": null
+    }
+      ```
+
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:**
+    ```
+    {
+        "data": null,
+        "errors": null
+    }
+    ```
+
+* **Sample Call:**
+
+  ```
+  curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"username":"user","password":"1234"}' \
+  https://pibic-project.herokuapp.com/login
+  ```
+
+* **Notes:**
+
+  The `401` code will be retured if the credentials are wrong. If they are right,
+  the token needed to access the protected endpoints will be in the sent field
+  `data.token` of the response. The token is set to expire in 15 minutes for
+  security reasons. When this happens, you will need to log in again in order to
+  get a new token to replace the old one.
+
+
+## **Create an User**
+Register a new user in the database
+
+* **URL**
+
+  /user
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+    ```
+    {
+        "username": "user",
+        "password": "1234",
+        "name": {
+            "firstName": "John",
+            "lastName": "Doe"
+        },
+        "email": "johndoe@example.com"
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:**
+    ```
+    {
+        "data": {
+            "name": {
+                "firstName": "John",
+                "lastName": "Doe"
+            },
+            "_id": "5baa6d9f46b8e827d6790734",
+            "username": "user",
+            "password": "",
+            "email": "johndoe@example.com",
+            "createdAt": "2018-09-25T17:17:19.249Z",
+            "__v": 0
+        },
+        "errors": null
+    }
+    ```
+
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:**
+    ```
+    {
+        "errors": {
+            "errors": {
+                "password": {
+                    "message": "Path `password` is required.",
+                    "name": "ValidatorError",
+                    "properties": {
+                        "message": "Path `{PATH}` is required.",
+                        "type": "required",
+                        "path": "password"
+                    },
+                    "kind": "required",
+                    "path": "password",
+                    "$isValidatorError": true
+                }
+            },
+            "_message": "User validation failed",
+            "message": "User validation failed: password: Path `password` is required.",
+            "name": "ValidationError"
+        }
+    }
+    ```
+
+* **Sample Call:**
+
+  ```
+  curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"username":"user","password":"1234", "name": {"firstName": "John", "lastName": "Doe"}, "email": "johndoe@example.com"}' \
+  https://pibic-project.herokuapp.com/user
+  ```
+
+* **Notes:**
+
+  The `400` code will be retured if some of the fields is missing. All of them
+  are required.
+
+
+## **Get logged User**
+Get info from the user that is currently logged in
+
+* **URL**
+
+    /user
+
+* **Method:**
+
+    `GET`
+
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+    * **Code:** 200 <br />
+      **Content:**
+    ```
+      {
+          "data": {
+            "name": {
+                "firstName": "John",
+                "lastName": "Doe"
+            },
+            "_id": "5baa6d9f46b8e827d6790734",
+            "username": "user",
+            "password": "",
+            "email": "johndoe@example.com",
+            "createdAt": "2018-09-25T17:17:19.249Z",
+            "__v": 0
+          },
+          "errors": []
+      }
+    ```
+
+* **Error Response:**
+
+    * **Code:** 401 UNAUTHORIZED <br />
+      **Content:**
+      ```
+    {
+        "data": false,
+        "errors": []
+    }
+      ```
+
+* **Sample Call:**
+
+    ```
+    curl --header "Content-Type: application/json" \
+    --request GET \
+    -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7ImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IkRvZSJ9LCJfaWQiOiI1YmFhNmQ5ZjQ2YjhlODI3ZDY3OTA3MzQiLCJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRLZTVEMkRNUS9pdTgwNmYzV0Z5ME1PMzFTb1kuT0lrNjdWc2NGQjdvUUozSWdYY2xhTHQxUyIsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMjVUMTc6MTc6MTkuMjQ5WiIsIl9fdiI6MCwiaWF0IjoxNTM3OTYyNzk5LCJleHAiOjE1Mzc5NjM2OTl9.U-Tg0U_r1uzFrSgO9oIrieyKK7Tw5-T8BnmRsb5shI8" \
+    https://pibic-project.herokuapp.com/user
+    ```
+
+* **Notes:**
+
+    The `401` code will be retured if the token at the authorization header is
+    missing or invalid.

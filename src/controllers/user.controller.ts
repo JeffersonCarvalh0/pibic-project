@@ -9,26 +9,30 @@ import { IUser, UserModel } from '../db/user.db';
 export class UserController {
     public static login(req: Request, res: Response) {
         passport.authenticate('local', { session: false, failureFlash: true }, (err: Error, user: IUser) => {
-            res.statusCode = err || !user ? 400 : 200;
+            res.statusCode = err || !user ? 401 : 200;
             const token = user ? jwt.sign(user.toJSON(), config.SECRET, { expiresIn: '15m' }) : null;
-            res.json({data: token, errors: err});
+            res.json({ data: {"token": token}, errors: err});
         })(req, res);
     }
 
     public static async register(req: Request, res: Response) {
-        let user: IUser = new UserModel(req.body);
+        try {
+            console.log(req.body);
+            let user: IUser = new UserModel(req.body);
 
-        user.save((err: Error, doc: IUser) => {
-            res.statusCode = err ? 406 : 201;
-            doc.password = "";
-            res.json({data: doc, errors: err});
-        });
+            user.save((err: Error, doc: IUser) => {
+                res.statusCode = err ? 400 : 201;
+                if (doc) doc.password = "";
+                res.json({data: doc, errors: err});
+            });
+        } catch (err) { throw err; }
     }
 
-    public static testAuth(req: Request, res: Response) {
+    public static getUser(req: Request, res: Response) {
         passport.authenticate('jwt', { session: false }, (err: Error, user: IUser) => {
             res.statusCode = user ? 200 : 401;
-            res.json({ data: req.user, errors: [] });
+            if (user) user.password = "";
+            res.json({ data: user, errors: [] });
         })(req, res);
     }
 

@@ -118,19 +118,23 @@ class UsersTest {
             .send(credentials);
 
             assert.equal(res.status, 200, 'The http code is wrong');
-            UsersTest.token = res.body.data;
+            UsersTest.token = res.body.data.token;
         } catch (err) { throw err; }
     }
 
-    @test("/POST user - Should test authentication")
-    public async testAuth() {
+    @test("/POST user - Should info from the logged user")
+    public async getUser() {
         try {
             const res = await chai.request(server.instance)
-            .get(`/testAuth`)
+            .get(`/user`)
             .set('Authorization', `Bearer ${UsersTest.token}`)
             .set('Content-Type', 'applicaiton/json');
 
             assert.equal(res.status, 200, 'The http code is wrong');
+            assert.equal(res.body.data.username, mockUser.username, 'The username is wrong');
+            assert.equal(res.body.data.name.firstName, mockUser.name.firstName, 'The first name is wrong');
+            assert.equal(res.body.data.name.lastName, mockUser.name.lastName, 'The last name is wrong');
+            assert.equal(res.body.data.email, mockUser.email, 'The e-mail is wrong');
         } catch (err) { throw err; }
     }
 
