@@ -38,9 +38,10 @@ export class UserController {
 
     public static async remove(req: Request, res: Response) {
         passport.authenticate('jwt', {session: false}, async(err: Error, user: IUser) => {
-            res.statusCode = user ? 201 : 401;
+            res.statusCode = user ? 204 : 401;
             if (user) await UserModel.findByIdAndRemove(user._id);
-            res.json({ data: null, errors: err })
+            if (res.statusCode == 204) res.json();
+            else res.json({ data: null, errors: err });
         })(req, res);
     }
 }

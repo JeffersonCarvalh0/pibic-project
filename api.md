@@ -1170,7 +1170,9 @@ Log in an user registered in the database
     **Content:**
     ```
     {
-        "data": null,
+        "data": {
+            "token": null
+        },
         "errors": null
     }
     ```
@@ -1352,3 +1354,51 @@ Get info from the user that is currently logged in
 
     The `401` code will be retured if the token at the authorization header is
     missing or invalid.
+
+
+**Delete an User**
+----
+  Deletes the logged user from the database.
+
+* **URL**
+
+  /user
+
+* **Method:**
+
+  `DELETE`
+
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 204 <br />
+    **Content:**
+
+    None
+
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:**
+    ```
+    {
+        "data": null,
+        "errors": null
+    }
+    ```
+
+* **Sample Call:**
+
+  ```
+  curl --header "Content-Type: application/json" \
+  --request DELETE \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7ImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IkRvZSJ9LCJfaWQiOiI1YmFhNmQ5ZjQ2YjhlODI3ZDY3OTA3MzQiLCJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRLZTVEMkRNUS9pdTgwNmYzV0Z5ME1PMzFTb1kuT0lrNjdWc2NGQjdvUUozSWdYY2xhTHQxUyIsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMjVUMTc6MTc6MTkuMjQ5WiIsIl9fdiI6MCwiaWF0IjoxNTM3OTYyNzk5LCJleHAiOjE1Mzc5NjM2OTl9.U-Tg0U_r1uzFrSgO9oIrieyKK7Tw5-T8BnmRsb5shI8" \
+  https://pibic-project.herokuapp.com/user
+  ```
