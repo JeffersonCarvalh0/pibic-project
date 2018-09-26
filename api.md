@@ -1332,12 +1332,12 @@ Get info from the user that is currently logged in
 
     * **Code:** 401 UNAUTHORIZED <br />
       **Content:**
-      ```
+    ```
     {
         "data": false,
         "errors": []
     }
-      ```
+    ```
 
 * **Sample Call:**
 
