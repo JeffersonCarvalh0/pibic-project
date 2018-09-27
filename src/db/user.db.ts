@@ -54,6 +54,9 @@ export var UserSchema: Schema = new Schema({
     }
 });
 
+UserSchema.index({ "username": 1 });
+UserSchema.index({ "email": 1 });
+
 UserSchema.pre('save', function(this: any, next) {
     let user = this;
 

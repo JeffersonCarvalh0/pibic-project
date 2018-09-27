@@ -9,11 +9,11 @@ import { IUser, UserModel } from './db/user.db';
 passport.use(new LocalStrategy((username, password, done) => {
     UserModel.findOne({username: username})
     .then((user: IUser | null) => {
-        if (!user) return done(null, false, { message: 'Invalid username.' });
+        if (!user) return done(null, false, { message: 'Invalid username' });
         user.compare(password, (err: Error, isMatch: boolean) => {
             if (err) throw err;
-            if (!isMatch) return done(null, false, {message: 'Invalid password'});
-            return done(null, user);
+            if (!isMatch) return done(null, false, { message: 'Invalid password' });
+            return done(null, user, { message: 'Successfully authenticated' });
         });
     })
     .catch((err: Error) => done(err));
@@ -27,8 +27,8 @@ var opts = {
 passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
     UserModel.findOne({username: jwtPayload.username})
     .then((user: IUser | null) => {
-        if (!user) return done(null, false, { message: 'Invalid username from the token.' });
-        return done(null, user, { message: 'The token is valid.' });
+        if (!user) return done(null, false, { message: 'Invalid username from the token' });
+        return done(null, user, { message: 'Successfully authenticated' });
     })
     .catch((err: Error) => done(err));
 }));

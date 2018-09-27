@@ -1160,7 +1160,8 @@ Log in an user registered in the database
         "data": {
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7ImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IkRvZSJ9LCJfaWQiOiI1YmFhNmQ5ZjQ2YjhlODI3ZDY3OTA3MzQiLCJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRLZTVEMkRNUS9pdTgwNmYzV0Z5ME1PMzFTb1kuT0lrNjdWc2NGQjdvUUozSWdYY2xhTHQxUyIsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMjVUMTc6MTc6MTkuMjQ5WiIsIl9fdiI6MCwiaWF0IjoxNTM3OTYyNzk5LCJleHAiOjE1Mzc5NjM2OTl9.U-Tg0U_r1uzFrSgO9oIrieyKK7Tw5-T8BnmRsb5shI8"
         },
-          "errors": null
+        "message": "Successfully authenticated",
+        "errors": null
     }
       ```
 
@@ -1173,6 +1174,7 @@ Log in an user registered in the database
         "data": {
             "token": null
         },
+        "message": "Invalid username"
         "errors": null
     }
     ```
@@ -1242,6 +1244,7 @@ Register a new user in the database
             "createdAt": "2018-09-25T17:17:19.249Z",
             "__v": 0
         },
+        "message": "user created",
         "errors": null
     }
     ```
@@ -1252,6 +1255,7 @@ Register a new user in the database
     **Content:**
     ```
     {
+        "message": "User validation failed: password: Path `password` is required.",
         "errors": {
             "errors": {
                 "password": {
@@ -1326,6 +1330,7 @@ Get info from the user that is currently logged in
             "createdAt": "2018-09-25T17:17:19.249Z",
             "__v": 0
           },
+          "message": "Successfully authenticated",
           "errors": []
       }
     ```
@@ -1337,6 +1342,7 @@ Get info from the user that is currently logged in
     ```
     {
         "data": false,
+        "message": "Unexpected token \b in JSON at position 210",
         "errors": []
     }
     ```
@@ -1353,7 +1359,7 @@ Get info from the user that is currently logged in
 * **Notes:**
 
     The `401` code will be retured if the token at the authorization header is
-    missing or invalid.
+    missing or invalid. This is specified at the `message` field.
 
 
 **Delete an User**
@@ -1390,6 +1396,7 @@ Get info from the user that is currently logged in
     ```
     {
         "data": null,
+        "message": "Unexpected token \b in JSON at position 210",
         "errors": null
     }
     ```
@@ -1402,3 +1409,8 @@ Get info from the user that is currently logged in
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjp7ImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IkRvZSJ9LCJfaWQiOiI1YmFhNmQ5ZjQ2YjhlODI3ZDY3OTA3MzQiLCJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRLZTVEMkRNUS9pdTgwNmYzV0Z5ME1PMzFTb1kuT0lrNjdWc2NGQjdvUUozSWdYY2xhTHQxUyIsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMjVUMTc6MTc6MTkuMjQ5WiIsIl9fdiI6MCwiaWF0IjoxNTM3OTYyNzk5LCJleHAiOjE1Mzc5NjM2OTl9.U-Tg0U_r1uzFrSgO9oIrieyKK7Tw5-T8BnmRsb5shI8" \
   https://pibic-project.herokuapp.com/user
   ```
+
+* **Notes:**
+
+  The `401` code will be retured if the token at the authorization header is
+  missing or invalid. This is specified at the `message` field.
