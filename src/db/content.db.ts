@@ -2,17 +2,21 @@ import mongoose from 'mongoose';
 import { Schema, Document, Model, model } from 'mongoose';
 
 export interface IContent extends Document {
-    title: string;
     description: string;
+    correct: string;
+    wrong: string
 }
 
 export var ContentSchema: Schema = new Schema({
-    title: {
-        type: String,
-        required: true
+    description: {
+        type: String
     },
 
-    description: {
+    correct: {
+        type: String
+    },
+
+    wrong: {
         type: String
     }
 });

@@ -9,6 +9,7 @@ async function toUser(doc: ILocation): Promise<ILocationUser> {
     let data: ILocationUser = {
         _id: doc._id,
         name: doc.name,
+        description: doc.description,
         content: doc.content,
         latitude: doc.coord.coordinates[1],
         longitude: doc.coord.coordinates[0]

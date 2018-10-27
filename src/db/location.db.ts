@@ -5,6 +5,7 @@ import { IContent } from './content.db';
 
 export interface ILocation extends Document {
     name: string;
+    description: string;
     coord: { type: string, coordinates: number[] };
     content: IContent;
 }
@@ -12,6 +13,7 @@ export interface ILocation extends Document {
 export interface ILocationUser {
     _id: string;
     name: string;
+    description: string;
     content: IContent | null;
     latitude: number;
     longitude: number;
@@ -21,6 +23,10 @@ export var LocationSchema: Schema = new Schema({
     name: {
         type: String,
         required: true
+    },
+
+    description: {
+        type: String
     },
 
     coord: {
