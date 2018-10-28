@@ -4,7 +4,7 @@ import { LocationModel, ILocation, ILocationUser } from '../db/location.db';
 import { ContentModel } from '../db/content.db';
 
 async function toUser(doc: ILocation): Promise<ILocationUser> {
-    doc = await doc.populate('content').execPopulate();
+    await doc.populate('content').execPopulate();
 
     let data: ILocationUser = {
         _id: doc._id,
