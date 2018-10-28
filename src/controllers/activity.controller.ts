@@ -4,14 +4,17 @@ import { ActivityModel, IActivity } from '../db/activity.db';
 
 export class ActivityController {
     public static getAll(req: Request, res: Response) {
-        ActivityModel.find({}, (err: Error, docs: IActivity[]) => {
+        ActivityModel.find({}, async(err: Error, docs: IActivity[]) => {
+            for (let doc of docs)
+                await doc.populate('content').populate('location').execPopulate();
             res.status(200).json({ data: docs, errors: err });
         });
     }
 
     public static getById(req: Request, res: Response) {
-        ActivityModel.findById(req.params.id, (err: Error, doc: IActivity) => {
+        ActivityModel.findById(req.params.id, async(err: Error, doc: IActivity) => {
             res.statusCode = err || doc == null ? 404 : 200;
+            await doc.populate('content').populate('location').execPopulate();
             res.json({ data: doc, errors: err });
         });
     }
@@ -19,17 +22,20 @@ export class ActivityController {
     public static create(req: Request, res: Response) {
         let activity = new ActivityModel(req.body);
 
-        activity.save((err: Error, doc: IActivity) => {
+        activity.save(async(err: Error, doc: IActivity) => {
             res.statusCode = err ? 406 : 201;
             if (!err) res.location(`/activity/${doc._id}`);
+            await doc.populate('content').populate('location').execPopulate();
             res.json({ data: doc, errors: err });
         });
     }
 
     public static update(req: Request, res: Response) {
         const conditions = { _id: req.params.id };
-        ActivityModel.findOneAndUpdate(req.params.id, req.body, { new: true }, (err: Error, activity: IActivity | null) => {
+        ActivityModel.findOneAndUpdate(req.params.id, req.body, { new: true }, async(err: Error, activity: IActivity | null) => {
             res.statusCode = err ? 404 : 200;
+            if (activity)
+                await activity.populate('content').populate('location').execPopulate();
             res.json({ data: activity, errors: err });
         });
     }

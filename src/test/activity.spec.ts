@@ -101,8 +101,8 @@ class ActivitiesTest {
             assert.equal(res.status, 200, 'The http code is wrong');
             assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong');
             assert.equal(res.body.data.description, "description updated", 'The description is wrong');
-            assert.equal(res.body.data.location, ActivitiesTest.locationId, 'The activity\'s id is wrong');
-            assert.equal(res.body.data.content, ActivitiesTest.contentId, 'The content\'s id is wrong');
+            assert.equal(res.body.data.location._id, ActivitiesTest.locationId, 'The activity\'s id is wrong');
+            assert.equal(res.body.data.content._id, ActivitiesTest.contentId, 'The content\'s id is wrong');
             assert.equal(res.body.data._id, ActivitiesTest.activityId, 'The id is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
