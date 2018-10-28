@@ -10,12 +10,22 @@ async function toUser(doc: ILocation): Promise<ILocationUser> {
         _id: doc._id,
         name: doc.name,
         description: doc.description,
-        content: doc.content,
-        latitude: doc.coord.coordinates[1],
-        longitude: doc.coord.coordinates[0]
+        coord: [doc.coord.coordinates[0], doc.coord.coordinates[1]]
     };
 
     return new Promise<ILocationUser>((resolve) => resolve(data));
+}
+
+function toDB(obj: ILocationUser) {
+    let location: any = {}
+    for (let key of Object.keys(obj)) location[key] = obj[key];
+
+    if (location.coord !== undefined)
+        location.coord = { type: "Point", coordinates: location.coord }
+
+    // console.log(location);
+
+    return location;
 }
 
 export class LocationController {
@@ -40,13 +50,7 @@ export class LocationController {
         let data: ILocationUser | null = null;
         let errors: Object | null = null;
 
-        let location = {
-            name: req.body.name,
-            coord: { type: "Point", coordinates: [req.body.longitude, req.body.latitude] },
-            content: req.body.content
-        };
-
-        let locationDocument = new LocationModel(location);
+        let locationDocument = new LocationModel(toDB(req.body));
 
         res.statusCode = 406;
         try {
@@ -59,23 +63,13 @@ export class LocationController {
         res.json({ data: data, errors: errors });
     }
 
-    public static async setContent(req: Request, res: Response) {
-        let errors: Object | null = null;
+    public static async update(req: Request, res: Response) {
         let data: ILocationUser | null = null;
-
-        res.statusCode = 404;
-        try {
-            let location = await LocationModel.findById(req.params.locationId);
-            let content = await ContentModel.findById(req.params.contentId);
-
-            if (location && content) {
-                location.content = req.params.contentId;
-                await location.save();
-                res.statusCode = 200;
-                data = await toUser(location);
-            }
-        } catch (err) { errors = err; }
-        res.json({ data: data, errors: errors });
+        LocationModel.findByIdAndUpdate(req.params.id, toDB(req.body), { new: true }, async (err: Error, location: ILocation | null) => {
+            res.statusCode = err || location == null ? 406 : 200;
+            if (location) data = await toUser(location);
+            res.json({ data: data, errors: err });
+        });
     }
 
     public static async remove(req: Request, res: Response) {

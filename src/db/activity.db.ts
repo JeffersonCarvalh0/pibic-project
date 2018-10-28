@@ -6,7 +6,7 @@ import { IContent } from './content.db';
 
 export interface IActivity extends Document {
     title: string;
-    statement: string;
+    description: string;
     location: ILocation;
     content: IContent
 }
@@ -17,7 +17,7 @@ export var ActivitySchema: Schema = new Schema({
         required: true
     },
 
-    statement: {
+    description: {
         type: String,
         required: true
     },

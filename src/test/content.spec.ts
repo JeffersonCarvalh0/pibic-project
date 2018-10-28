@@ -5,41 +5,28 @@ import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 
 import { server } from '../server';
-import { ContentModel, IContent } from '../db/content.db';
-import { LocationModel } from '../db/location.db';
+import { ContentModel } from '../db/content.db';
 
 chai.use(chaiHttp);
 
 let mockContent = {
-    title: "test",
-    description: "An awesome test!"
-}
-
-let mockLocation = {
-    name: "test",
-    latitude: 1.0,
-    longitude: 1.5
+    description: "An awesome test!",
+    correct: "Way to go, dude. You got it right!",
+    wrong: "Damn, son. Try that again, would ya?"
 }
 
 @suite("Contents")
 class ContentsTest {
     public static contentId: string;
-    public static locationId: string;
 
     public static async before() {
         try {
             server.start();
             await ContentModel.deleteMany({});
-            await LocationModel.deleteMany({});
-            let res = await chai.request(server.instance)
-            .post('/location')
-            .set('Content-Type', 'application/json')
-            .send(mockLocation);
-            ContentsTest.locationId = res.body._id;
         } catch (err) { throw err; }
     }
 
-    @test("/GET content - Should get all contents from the db")
+    @test("/GET content - Should get all Contents from the db")
     public async getAll() {
         try {
             let res = await chai.request(server.instance)
@@ -52,7 +39,7 @@ class ContentsTest {
         } catch(err) { throw err; }
     }
 
-    @test("/POST content - Should create a new content in the database")
+    @test("/POST content - Should create a new Content in the database")
     public async postContent() {
         try {
             let res = await chai.request(server.instance)
@@ -61,14 +48,15 @@ class ContentsTest {
             .send(mockContent);
 
             assert.equal(res.status, 201, 'The http code is wrong');
-            assert.equal(res.body.data.title, mockContent.title, 'The title is wrong');
             assert.equal(res.body.data.description, mockContent.description, 'The description is wrong');
+            assert.equal(res.body.data.correct, mockContent.correct, 'The correct field is wrong');
+            assert.equal(res.body.data.wrong, mockContent.wrong, 'The wrong field is wrong'); // lol
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
             ContentsTest.contentId = res.body.data._id;
         } catch(err) { throw err; }
     }
 
-    @test("/GET content - Should get a content by id")
+    @test("/GET content - Should get a Content by id")
     public async getById() {
         try {
             let res = await chai.request(server.instance)
@@ -76,13 +64,14 @@ class ContentsTest {
             .set('Content-Type', 'application/json');
 
             assert.equal(res.status, 200, 'The http code is wrong');
-            assert.equal(res.body.data.title, mockContent.title, 'The title is wrong');
             assert.equal(res.body.data.description, mockContent.description, 'The description is wrong');
+            assert.equal(res.body.data.correct, mockContent.correct, 'The correct field is wrong');
+            assert.equal(res.body.data.wrong, mockContent.wrong, 'The wrong field is wrong'); // lol
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch(err) { throw err; }
     }
 
-    @test("/PUT content - Should update a content in the database")
+    @test("/PUT content - Should update a Content in the database")
     public async update() {
         try {
             let res = await chai.request(server.instance)
@@ -91,13 +80,14 @@ class ContentsTest {
             .send({ description: 'An even better test!!!' });
 
             assert.equal(res.status, 200, 'The http code is wrong');
-            assert.equal(res.body.data.title, mockContent.title, 'The title is wrong');
             assert.equal(res.body.data.description, 'An even better test!!!', 'The description is wrong');
+            assert.equal(res.body.data.correct, mockContent.correct, 'The correct field is wrong');
+            assert.equal(res.body.data.wrong, mockContent.wrong, 'The wrong field is wrong'); // lol
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch(err) { throw err; }
     }
 
-    @test("/DELETE content - Should delete a content from the database")
+    @test("/DELETE content - Should delete a Content from the database")
     public async remove() {
         try {
             let res = await chai.request(server.instance)

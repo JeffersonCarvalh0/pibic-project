@@ -11,19 +11,14 @@ import { ContentModel } from '../db/content.db';
 
 chai.use(chaiHttp);
 
-let mockLocation = { name: "test", latitude: 1.0, longitude: 1.5 };
-let mockLocation2 = { name: "test2", latitude: 0.9, longitude: 0.8 };
-let mockLocation3 = { name: "test3", latitude: 0.7, longitude: 0.6 };
-
-let mockContent = { title: "test", description: "An awesome test!" };
-let mockActivity = { title: "activity", statement: "just passing by" };
+let mockLocation = { name: "test", coord: [1.5, 1.0] };
+let mockContent = { description: "An awesome test!", correct: "Yay", wrong: "Nah" };
+let mockActivity = { title: "activity", description: "just passing by" };
 
 @suite("Activities")
 class ActivitiesTest {
     public static contentId: string;
     public static locationId: string;
-    public static location2Id: string;
-    public static location3Id: string;
     public static activityId: string;
 
     public static async before() {
@@ -44,22 +39,6 @@ class ActivitiesTest {
             .set('Content-Type', 'application/json')
             .send(mockLocation);
             ActivitiesTest.locationId = res.body.data._id;
-
-            res = await chai.request(server.instance)
-            .post(`/location`)
-            .set('Content-Type', 'application/json')
-            .send(mockLocation2);
-            ActivitiesTest.location2Id = res.body.data._id;
-
-            res = await chai.request(server.instance)
-            .post(`/location`)
-            .set('Content-Type', 'application/json')
-            .send(mockLocation3);
-            ActivitiesTest.location3Id = res.body.data._id;
-
-            await chai.request(server.instance)
-            .put(`/location/${ActivitiesTest.locationId}/${ActivitiesTest.contentId}`)
-            .set('Content-Type', 'application/json');
         } catch (err) { throw err; }
     }
 
@@ -86,7 +65,7 @@ class ActivitiesTest {
 
             assert.equal(res.status, 201, 'The http code is wrong');
             assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong');
-            assert.equal(res.body.data.statement, mockActivity.statement, 'The statement is wrong');
+            assert.equal(res.body.data.description, mockActivity.description, 'The description is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
             ActivitiesTest.activityId = res.body.data._id;
         } catch (err) { throw err; }
@@ -101,7 +80,7 @@ class ActivitiesTest {
 
             assert.equal(res.status, 200, 'The http code is wrong');
             assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong');
-            assert.equal(res.body.data.statement, mockActivity.statement, 'The statement is wrong');
+            assert.equal(res.body.data.description, mockActivity.description, 'The description is wrong');
             assert.equal(res.body.data._id, ActivitiesTest.activityId, 'The id is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
@@ -114,20 +93,16 @@ class ActivitiesTest {
             .put(`/activity/${ActivitiesTest.activityId}`)
             .set('Content-Type', 'application/json')
             .send({
-                statement: "statement updated",
-                locations: [
-                    ActivitiesTest.locationId,
-                    ActivitiesTest.location2Id,
-                    ActivitiesTest.location3Id
-                ]
+                description: "description updated",
+                location: ActivitiesTest.locationId,
+                content: ActivitiesTest.contentId
             });
 
             assert.equal(res.status, 200, 'The http code is wrong');
             assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong');
-            assert.equal(res.body.data.statement, "statement updated", 'The statement is wrong');
-            assert.equal(res.body.data.locations[0], ActivitiesTest.locationId, 'The first id is wrong');
-            assert.equal(res.body.data.locations[1], ActivitiesTest.location2Id, 'The second id is wrong');
-            assert.equal(res.body.data.locations[2], ActivitiesTest.location3Id, 'The third id is wrong');
+            assert.equal(res.body.data.description, "description updated", 'The description is wrong');
+            assert.equal(res.body.data.location, ActivitiesTest.locationId, 'The activity\'s id is wrong');
+            assert.equal(res.body.data.content, ActivitiesTest.contentId, 'The content\'s id is wrong');
             assert.equal(res.body.data._id, ActivitiesTest.activityId, 'The id is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }

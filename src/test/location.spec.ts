@@ -6,43 +6,28 @@ import mongoose from 'mongoose';
 
 import { server } from '../server';
 import { LocationModel } from '../db/location.db';
-import { ContentModel } from '../db/content.db';
 
 chai.use(chaiHttp);
 
 let mockLocation = {
     name: "test",
-    latitude: 1.0,
-    longitude: 1.5
-}
-
-let mockContent = {
-    title: "test",
-    description: "An awesome test!"
+    description: "whatever",
+    coord: [1.5, 1.0] // longitude, latitude
 }
 
 @suite("Locations")
 class LocationsTest {
     public static locationId: string;
-    public static contentId: string;
 
     public static async before() {
         try {
             server.start();
             await LocationModel.deleteMany({});
-            await ContentModel.deleteMany({});
-
-            let res = await chai.request(server.instance)
-            .post(`/content`)
-            .set('Content-Type', 'application/json')
-            .send(mockContent);
-
-            LocationsTest.contentId = res.body.data._id;
         }
         catch (err) { throw err; }
     }
 
-    @test("/GET location - Should get all locations in the db")
+    @test("/GET location - Should get all Locations in the db")
     public async getAll() {
         try {
             const res = await chai.request(server.instance)
@@ -55,7 +40,7 @@ class LocationsTest {
         } catch (err) { throw err; }
     }
 
-    @test("/POST location - Should create a new location in the database")
+    @test("/POST location - Should create a new Location in the database")
     public async create() {
         try {
             const res = await chai.request(server.instance)
@@ -64,14 +49,16 @@ class LocationsTest {
             .send(mockLocation);
 
             assert.equal(res.status, 201, 'The http code is wrong');
-            assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
-            assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
+            assert.equal(res.body.data.name, mockLocation.name, 'The name is wrong');
+            assert.equal(res.body.data.description, mockLocation.description, 'The description is wrong');
+            assert.equal(res.body.data.coord[1], mockLocation.coord[1], 'The latitude is wrong');
+            assert.equal(res.body.data.coord[0], mockLocation.coord[0], 'The longitude is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
             LocationsTest.locationId = res.body.data._id;
         } catch (err) { throw err; }
     }
 
-    @test("/GET location - Should get a location by id")
+    @test("/GET location - Should get a Location by id")
     public async getById() {
         try {
             const res = await chai.request(server.instance)
@@ -79,30 +66,34 @@ class LocationsTest {
             .set('Content-Type', 'application/json');
 
             assert.equal(res.status, 200, 'The http code is wrong');
-            assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
-            assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
+            assert.equal(res.body.data.name, mockLocation.name, 'The name is wrong');
+            assert.equal(res.body.data.description, mockLocation.description, 'The description is wrong');
+            assert.equal(res.body.data.coord[1], mockLocation.coord[1], 'The latitude is wrong');
+            assert.equal(res.body.data.coord[0], mockLocation.coord[0], 'The longitude is wrong');
             assert.equal(res.body.data._id, LocationsTest.locationId, 'The id is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
     }
 
-    @test("/PUT location - should add a content to the location")
-    public async addContent() {
+    @test("/PUT location - should update a Location")
+    public async update() {
         try {
             const res = await chai.request(server.instance)
-            .put(`/location/${LocationsTest.locationId}/${LocationsTest.contentId}`)
-            .set('Content-Type', 'application/json');
+            .put(`/location/${LocationsTest.locationId}`)
+            .set('Content-Type', 'application/json')
+            .send({ description: "new description" });
 
             assert.equal(res.status, 200, 'The http code is wrong')
-            assert.equal(res.body.data.latitude, mockLocation.latitude, 'The latitude is wrong');
-            assert.equal(res.body.data.longitude, mockLocation.longitude, 'The longitude is wrong');
+            assert.equal(res.body.data.name, mockLocation.name, 'The name is wrong');
+            assert.equal(res.body.data.description, "new description", 'The description is wrong');
+            assert.equal(res.body.data.coord[1], mockLocation.coord[1], 'The latitude is wrong');
+            assert.equal(res.body.data.coord[0], mockLocation.coord[0], 'The longitude is wrong');
             assert.equal(res.body.data._id, LocationsTest.locationId);
-            assert.equal(res.body.data.content._id, LocationsTest.contentId, 'The id of the content is wrong');
             assert.typeOf(res.body.errors, 'null', `${res.body.errors}`);
         } catch (err) { throw err; }
     }
 
-    @test("/DELETE location - Should delete the specified location")
+    @test("/DELETE location - Should delete the specified Location")
     public async remove() {
         try {
             const res = await chai.request(server.instance)

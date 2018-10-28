@@ -7,16 +7,14 @@ export interface ILocation extends Document {
     name: string;
     description: string;
     coord: { type: string, coordinates: number[] };
-    content: IContent;
 }
 
 export interface ILocationUser {
     _id: string;
     name: string;
     description: string;
-    content: IContent | null;
-    latitude: number;
-    longitude: number;
+    coord: number[];
+    [key: string]: any;
 }
 
 export var LocationSchema: Schema = new Schema({
@@ -32,12 +30,6 @@ export var LocationSchema: Schema = new Schema({
     coord: {
         type: { type: String },
         coordinates: [Number], // [longitude, latitude]
-    },
-
-    content: {
-        type: Schema.Types.ObjectId,
-        ref: 'Content',
-        default: null
     },
 });
 LocationSchema.index({ "coord": "2dsphere" });

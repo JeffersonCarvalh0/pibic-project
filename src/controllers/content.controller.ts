@@ -28,8 +28,7 @@ export class ContentController {
     }
 
     public static update(req: Request, res: Response) {
-        const conditions = { _id: req.params.id };
-        ContentModel.findOneAndUpdate(conditions, req.body, { new: true }, (err: Error, content: IContent | null) => {
+        ContentModel.findOneAndUpdate(req.params.id, req.body, { new: true }, (err: Error, content: IContent | null) => {
             res.statusCode = err || content == null ? 406 : 200;
             res.json({ data: content, errors: err });
         });
