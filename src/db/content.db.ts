@@ -9,15 +9,18 @@ export interface IContent extends Document {
 
 export var ContentSchema: Schema = new Schema({
     description: {
-        type: String
+        type: String,
+        required: true
     },
 
     correct: {
-        type: String
+        type: String,
+        required: true
     },
 
     wrong: {
-        type: String
+        type: String,
+        required: true
     }
 });
 

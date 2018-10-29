@@ -51,13 +51,32 @@ Returns all Activities in the database.
     {
         "data": [
             {
-                "locations":[],
-                "_id":"5b7ea311a7033b0014343aca",
-                "title":"the title goes here",
-                "statement":"the statement goes here","__v":0
-            },
-            ...
-        ],
+                "_id": "5bd6569146822278e56b273d",
+                "title": "activity",
+                "description": "just passing by",
+                "location": {
+                    "coord": {
+                        "coordinates": [
+                            1.5,
+                            1
+                        ],
+                        "type": "Point"
+                    },
+                    "_id": "5bd64e8746822278e56b273a",
+                    "name": "test",
+                    "description": "whatever",
+                    "__v": 0
+                },
+                "content": {
+                    "_id": "5bd64978548393772fbc0c47",
+                    "description": "An awesome test!",
+                    "correct": "Way to go, dude. You got it right!",
+                    "wrong": "Damn, son. Try that again, would ya?",
+                    "__v": 0
+                },
+                "__v": 0
+            }
+        ...],
         "errors": null
     }
     ```
@@ -99,10 +118,29 @@ None
     ```
     {
         "data": {
-            "locations":[],
-            "_id": "5b7ea311a7033b0014343aca",
-            "title": "test",
-            "statement": "testing",
+            "_id": "5bd6569146822278e56b273d",
+            "title": "activity",
+            "description": "just passing by",
+            "location": {
+                "coord": {
+                    "coordinates": [
+                        1.5,
+                        1
+                    ],
+                    "type": "Point"
+                },
+                "_id": "5bd64e8746822278e56b273a",
+                "name": "test",
+                "description": "whatever",
+                "__v": 0
+            },
+            "content": {
+                "_id": "5bd64978548393772fbc0c47",
+                "description": "An awesome test!",
+                "correct": "Way to go, dude. You got it right!",
+                "wrong": "Damn, son. Try that again, would ya?",
+                "__v": 0
+            },
             "__v": 0
         },
         "errors": null
@@ -168,8 +206,9 @@ Creates a new Activity object in the database.
     ```
     {
         "title": "here goes the title",
-        "statement": "here goes the statement"
-        "locations": ["5b7ead384f85d1001416a320", ...]
+        "description": "here goes the description"
+        "location": "5bd64e8746822278e56b273a"
+        "content": "5bd64978548393772fbc0c47"
     }
     ```
 
@@ -180,15 +219,34 @@ Creates a new Activity object in the database.
     ```
     {
         "data": {
-            "locations": ["5b7ead384f85d1001416a320"],
-            "_id": "5b7ea311a7033b0014343aca",
-            "title": "here goes the title",
-            "statement": "here goes the statement",
-              "__v": 0
-          },
-          "errors": null
+            "_id": "5bd6569146822278e56b273d",
+            "title": "activity",
+            "description": "just passing by",
+            "location": {
+                "coord": {
+                    "coordinates": [
+                        1.5,
+                        1
+                    ],
+                    "type": "Point"
+                },
+                "_id": "5bd64e8746822278e56b273a",
+                "name": "test",
+                "description": "whatever",
+                "__v": 0
+            },
+            "content": {
+                "_id": "5bd64978548393772fbc0c47",
+                "description": "An awesome test!",
+                "correct": "Way to go, dude. You got it right!",
+                "wrong": "Damn, son. Try that again, would ya?",
+                "__v": 0
+            },
+            "__v": 0
+        },
+        "errors": null
     }
-      ```
+    ```
 
 * **Error Response:**
 
@@ -223,15 +281,14 @@ Creates a new Activity object in the database.
   ```
   curl --header "Content-Type: application/json" \
   --request POST \
-  --data '{"title":"the title goes here","statement":"the statement goes here", "locations": ["5b7ead384f85d1001416a320"]}' \
+  --data '{"title": "activity", "description": "just passing by", "location": "5bd64e8746822278e56b273a", "content": "5bd64978548393772fbc0c47"}' \
   https://pibic-project.herokuapp.com/activity
   ```
 
 * **Notes:**
 
-  The `title` parameter in the request body is required. Other parameters
-  different than `title`, `description` and `locations` are ignored. the
-  `locations` property is an array of Location MongoDB `ObjectId`s.
+  The `title` parameter in the request body is required.
+  `location` and `content` properties are MongoDB `ObjectId`s.
 
 
 ## **Update an Activity**
@@ -254,8 +311,9 @@ Updates an Activity from the database.
     ```
     {
         "title": "here goes the title",
-        "statement": "here goes the statement"
-        "locations": ["5b7ead384f85d1001416a320", ...]
+        "description": "here goes the description"
+        "location": "5bd64e8746822278e56b273a"
+        "content": "5bd64978548393772fbc0c47"
     }
     ```
 
@@ -265,15 +323,34 @@ Updates an Activity from the database.
   **Content:**
   ```
   {
-      "data": {
-          "locations": ["5b7ead384f85d1001416a320", ...]
-          "_id": "5b7d60ad6e4f7b17385325f1",
-          "title": "edited title",
-          "statement": "here goes the statement",
-          "__v": 0
-      },
-      "errors": null
-  }
+        "data": {
+            "_id": "5bd6569146822278e56b273d",
+            "title": "update title",
+            "description": "just passing by",
+            "location": {
+                "coord": {
+                    "coordinates": [
+                        1.5,
+                        1
+                    ],
+                    "type": "Point"
+                },
+                "_id": "5bd64e8746822278e56b273a",
+                "name": "test",
+                "description": "whatever",
+                "__v": 0
+            },
+            "content": {
+                "_id": "5bd64978548393772fbc0c47",
+                "description": "An awesome test!",
+                "correct": "Way to go, dude. You got it right!",
+                "wrong": "Damn, son. Try that again, would ya?",
+                "__v": 0
+            },
+            "__v": 0
+        },
+        "errors": null
+    }
   ```
 
 * **Error Response:**
@@ -298,7 +375,7 @@ Updates an Activity from the database.
   ```
   curl --header "Content-Type: application/json" \
   --request PUT \
-  --data '{"title":"edited title"}' \
+  --data '{"title":"updated title"}' \
   https://pibic-project.herokuapp.com/activity/5b7d60ad6e4f7b17385325f1
   ```
 
@@ -399,10 +476,12 @@ Deletes an Activity from the database.
     **Content:**
     ```
     {
-        "data": [{
-            "_id": "5b7d57c86e4f7b17385325f0",
-            "title": "test",
-            "description": "testing",
+        "data": [
+        {
+            "_id": "5bd64978548393772fbc0c47",
+            "description": "An awesome test!",
+            "correct": "Way to go, dude. You got it right!",
+            "wrong": "Damn, son. Try that again, would ya?",
             "__v": 0
         },
         ...],
@@ -448,9 +527,10 @@ Deletes an Activity from the database.
     ```
     {
         "data": {
-            "_id": "5b7d57c86e4f7b17385325f0",
-            "title": "test",
-            "description": "testing",
+            "_id": "5bd64978548393772fbc0c47",
+            "description": "An awesome test!",
+            "correct": "Way to go, dude. You got it right!",
+            "wrong": "Damn, son. Try that again, would ya?",
             "__v": 0
         },
         "errors": null
@@ -516,8 +596,9 @@ Creates a new Content object in the database.
 
     ```
     {
-        "title": "here goes the title",
-        "description": "here goes the description"
+        "description": "The content's description",
+        "correct": "Message to be shown if correct",
+        "wrong": "Message to be shown if wrong"
     }
     ```
 
@@ -528,12 +609,13 @@ Creates a new Content object in the database.
     ```
     {
         "data": {
-            "_id": "5b7d60ad6e4f7b17385325f1",
-            "title": "here goes the title",
-            "description": "here goes the description",
-              "__v": 0
-          },
-          "errors": null
+            "_id": "5bd64978548393772fbc0c47",
+            "description": "An awesome test!",
+            "correct": "Way to go, dude. You got it right!",
+            "wrong": "Damn, son. Try that again, would ya?",
+            "__v": 0
+        },
+        "errors": null
     }
       ```
 
@@ -543,24 +625,24 @@ Creates a new Content object in the database.
     **Content:**
     ```
     {
-    "errors": {
         "errors": {
-            "title": {
-                "message": "Path `title` is required.",
-                "name": "ValidatorError",
-                "properties": {
-                    "message": "Path `{PATH}` is required.",
-                    "type": "required",
-                    "path": "title"
-                },
-                "kind": "required",
-                "path": "title",
-                "$isValidatorError": true
-            }
-        },
-        "_message": "Content validation failed",
-        "message": "Content validation failed: title: Path `title` is required.",
-        "name": "ValidationError"
+            "errors": {
+                "description": {
+                    "message": "Path `description` is required.",
+                    "name": "ValidatorError",
+                    "properties": {
+                        "message": "Path `{PATH}` is required.",
+                        "type": "required",
+                        "path": "description"
+                    },
+                    "kind": "required",
+                    "path": "description",
+                    "$isValidatorError": true
+                }
+            },
+            "_message": "Content validation failed",
+            "message": "Content validation failed: description: Path `description` is required.",
+            "name": "ValidationError"
         }
     }
     ```
@@ -570,15 +652,13 @@ Creates a new Content object in the database.
     ```
     curl --header "Content-Type: application/json" \
     --request POST \
-    --data '{"title":"the title goes here","description":"the description goes here"}' \
+    --data '{ "description": "An awesome test!", "correct": "Way to go, dude. You got it right!", "wrong": "Damn, son. Try that again, would ya?" }' \
     https://pibic-project.herokuapp.com/content
     ```
 
 * **Notes:**
 
-  The `title` parameter in the request body is required. Other parameters
-  different than `title` and `description` are ignored.
-
+  All of the three parameters are required.
 
 **Update a Content**
 ----
@@ -600,8 +680,9 @@ Updates a content in the database.
 
     ```
     {
-        "title": "here goes the title",
-        "description": "here goes the description"
+        "description": "The content's description",
+        "correct": "Message to be shown if correct",
+        "wrong": "Message to be shown if wrong"
     }
     ```
 
@@ -613,8 +694,9 @@ Updates a content in the database.
     {
         "data": {
             "_id": "5b7d60ad6e4f7b17385325f1",
-            "title": "edited title",
-            "description": "here goes the description",
+            "description": "edited description",
+            "correct": "Way to go, dude. You got it right!",
+            "wrong": "Damn, son. Try that again, would ya?",
             "__v": 0
         },
         "errors": null
@@ -643,7 +725,7 @@ Updates a content in the database.
   ```
   curl --header "Content-Type: application/json" \
   --request PUT \
-  --data '{"title":"edited title"}' \
+  --data '{"description":"edited description"}' \
   https://pibic-project.herokuapp.com/content/5b7d60ad6e4f7b17385325f1
   ```
 
@@ -748,12 +830,14 @@ Updates a content in the database.
     {
         "data": [
             {
-                "_id": "5b8004744946eb00141f8497",
+                "_id": "5bd64e8746822278e56b273a",
                 "name": "test",
-                "content": null,
-                "latitude": 4,
-                "longitude": 2
-            }
+                "description": "whatever",
+                "coord": [
+                    1.5,
+                    1
+                ]
+            },
         ...],
         "errors": null
     }
@@ -797,11 +881,13 @@ Updates a content in the database.
     ```
     {
         "data": {
-            "_id": "5b8004744946eb00141f8497",
+            "_id": "5bd64e8746822278e56b273a",
             "name": "test",
-            "content": null,
-            "latitude": 4,
-            "longitude": 2
+            "description": "whatever",
+            "coord": [
+                1.5,
+                1
+            ]
         },
         "errors": null
     }
@@ -867,9 +953,8 @@ Creates a new Location object in the database.
     ```
     {
         "name": "here goes the name",
-        "latitude": "42",
-        "longitude": "-42",
-        "content": "5b7d60ad6e4f7b17385325f1"
+        "description": "here the location is described",
+        "coord": [1.5, 1], // longitude, latitude
     }
     ```
 
@@ -879,16 +964,16 @@ Creates a new Location object in the database.
     **Content:**
     ```
     {
-        "_id": "5b800c25d62d2e1cb1508713",
-        "name": "here goes the name",
-        "content": {
-            "_id": "5b7d60ad6e4f7b17385325f1",
-            "title": "test",
-            "description": "testing",
-            "__v": 0
+        "data": {
+            "_id": "5bd64e8746822278e56b273a",
+            "name": "test",
+            "description": "whatever",
+            "coord": [
+                1.5,
+                1
+            ]
         },
-        "latitude": 42,
-        "longitude": -42
+        "errors": null
     }
     ```
 
@@ -927,49 +1012,12 @@ Creates a new Location object in the database.
     {
         "data": null,
         "errors": {
-            "errors": {
-                "coord.coordinates": {
-                    "message": "Cast to Array failed for value \"[ undefined, undefined ]\" at path \"coord.coordinates\"",
-                    "name": "CastError",
-                    "stringValue": "\"[ undefined, undefined ]\"",
-                    "kind": "Array",
-                    "value": [
-                        null,
-                        null
-                    ],
-                    "path": "coord.coordinates",
-                    "reason": {
-                        "message": "Cast to [number] failed for value \"[null,null]\" at path \"coord.coordinates\"",
-                        "name": "CastError",
-                        "stringValue": "\"[null,null]\"",
-                        "kind": "[number]",
-                        "value": "[null,null]",
-                        "path": "coord.coordinates",
-                        "reason": {
-                            "message": "Cast to number failed for value \"undefined\" at path \"coord.coordinates\"",
-                            "name": "CastError",
-                            "stringValue": "\"undefined\"",
-                            "kind": "number",
-                            "path": "coord.coordinates"
-                        }
-                    }
-                },
-                "name": {
-                    "message": "Path `name` is required.",
-                    "name": "ValidatorError",
-                    "properties": {
-                        "message": "Path `{PATH}` is required.",
-                        "type": "required",
-                        "path": "name"
-                    },
-                    "kind": "required",
-                    "path": "name",
-                    "$isValidatorError": true
-                }
-            },
-            "_message": "Location validation failed",
-            "message": "Location validation failed: coord.coordinates: Cast to Array failed for value \"[ undefined, undefined ]\" at path \"coord.coordinates\", name: Path `name` is required.",
-            "name": "ValidationError"
+            "name": "MongoError",
+            "message": "Can't extract geo keys: { _id: ObjectId('5bd64eaf46822278e56b273b'), coord: { coordinates: [ 1.5 ], type: \"Point\" }, name: \"test\", description: \"whatever\", __v: 0 }  Point must only contain numeric elements",
+            "driver": true,
+            "index": 0,
+            "code": 16755,
+            "errmsg": "Can't extract geo keys: { _id: ObjectId('5bd64eaf46822278e56b273b'), coord: { coordinates: [ 1.5 ], type: \"Point\" }, name: \"test\", description: \"whatever\", __v: 0 }  Point must only contain numeric elements"
         }
     }
     ```
@@ -979,23 +1027,23 @@ Creates a new Location object in the database.
     ```
     curl --header "Content-Type: application/json" \
     --request POST \
-    --data '{ "name": "here goes the name", "latitude": "42", "longitude": "-42", "content": "5b7d60ad6e4f7b17385325f1" }' \
+    --data '{ "name": "test", "description": "whatever", "coord": [1.5, 1] }' \
     https://pibic-project.herokuapp.com/location
     ```
 
 * **Notes:**
 
-  The `name` and both coordinates request body are required. Other parameters
-  different than `name`, `latitude`, `longitude` and `content` are ignored.
-  `content` is a MongoDB `ObjectId` for a content in the database.
+  The `name` and `coord` fields are required.
+  The `coord` field must be an numeric array with two elements, where the first
+  one is the longitude and the second one is the latitude of the coordinate.
 
 **Update a Location**
 ----
-Updates a location, assigning a content to it.
+Updates a location in the database.
 
 * **URL**
 
-  /location/:locationId/:contentId
+  /location/:id
 
 * **Method:**
 
@@ -1003,12 +1051,17 @@ Updates a location, assigning a content to it.
 
 *  **URL Params**
 
-  `locationId=[string]` <br/>
-  `contentId=[string]`
+  `locationId=[string]`
 
 * **Data Params**
 
-    None
+    ```
+    {
+        "name": "here goes the name",
+        "description": "here the location is described",
+        "coord": [1.5, 1], // longitude, latitude
+    }
+    ```
 
 * **Success Response:**
 
@@ -1018,15 +1071,12 @@ Updates a location, assigning a content to it.
     {
         "data": {
             "_id": "5b800c25d62d2e1cb1508713",
-            "name": "here goes the name",
-            "content": {
-                "_id": "5b7d57c86e4f7b17385325f0",
-                "title": "test",
-                "description": "testing",
-                "__v": 0
-            },
-            "latitude": 42,
-            "longitude": -42
+            "name": "updated name",
+            "description": "whatever",
+            "coord": [
+                1.5,
+                1
+            ]
         },
         "errors": null
     }
@@ -1050,13 +1100,13 @@ Updates a location, assigning a content to it.
   ```
   curl --header "Content-Type: application/json" \
   --request PUT \
+  --data '{ "name": "updated name" }' \
   https://pibic-project.herokuapp.com/location/5b800c25d62d2e1cb1508713/5b7d57c86e4f7b17385325f0
   ```
 
 * **Notes:**
 
-  Both url parameters are MongoDB `ObjectId`s. The response code will be 404
-  if `locationId` OR `contentId` are not found.
+  The url parameter is a MongoDB `ObjectId`.
 
 
 **Delete a Location**
