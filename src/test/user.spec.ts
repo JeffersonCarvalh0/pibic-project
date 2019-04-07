@@ -1,6 +1,4 @@
-import { suite, test } from 'mocha-typescript';
-import { assert } from 'chai';
-import chai from 'chai';
+import chai, { assert } from 'chai';
 import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 
@@ -12,144 +10,140 @@ import { ContentModel } from '../db/content.db';
 
 chai.use(chaiHttp);
 
-let mockUser = {
-    username: "user",
-    password: "1234",
-    name: {
-        firstName: "John",
-        lastName: "Doe"
-    },
-    email: "johndoe@example.com"
-}
+describe('Users', () => {
+	let mockUser = {
+		username: "user",
+		password: "1234",
+		name: {
+			firstName: "John",
+			lastName: "Doe"
+		},
+		email: "johndoe@example.com"
+	}
 
-let credentials = {
-    username: mockUser.username,
-    password: mockUser.password
-};
+	let credentials = {
+		username: mockUser.username,
+		password: mockUser.password
+	};
 
-let mockLocation = { name: "test", latitude: 1.0, longitude: 1.5 };
-let mockLocation2 = { name: "test2", latitude: 0.9, longitude: 0.8 };
-let mockLocation3 = { name: "test3", latitude: 0.7, longitude: 0.6 };
+	const mockLocation = { name: "test", coord: [1.5, 1.0] };
+	const mockLocation2 = { name: "test2", coord: [0.8, 0.9] };
+	const mockLocation3 = { name: "test3", coord: [0.6, 0.7] };
+	const mockContent = { description: "An awesome test!", correct: "Yay", wrong: "Nah" };
+	const mockActivity = { title: "activity", description: "just passing by" };
 
-let mockContent = { title: "test", description: "An awesome test!" };
-let mockActivity = { title: "activity", statement: "just passing by" };
+	let userId: string;
+	let contentId: string;
+	let locationId: string;
+	let location2Id: string;
+	let location3Id: string;
+	let activityId: string;
+	let token: string;
 
-@suite("Users")
-class UsersTest {
-    public static userId: string;
-    public static contentId: string;
-    public static locationId: string;
-    public static location2Id: string;
-    public static location3Id: string;
-    public static activityId: string;
-    public static token: string;
+	before(async () => {
+		try {
+			await server.start();
+			await UserModel.deleteMany({});
+			await ContentModel.deleteMany({});
+			await LocationModel.deleteMany({});
+			await ActivityModel.deleteMany({});
 
-    public static async before() {
-        server.start();
-        await UserModel.deleteMany({});
-        await ContentModel.deleteMany({});
-        await LocationModel.deleteMany({});
-        await ActivityModel.deleteMany({});
+			let res = await chai.request(server.instance)
+				.post(`/content`)
+				.set('Content-Type', 'application/json')
+				.send(mockContent);
+			contentId = res.body.data._id;
 
-        let res = await chai.request(server.instance)
-        .post(`/content`)
-        .set('Content-Type', 'application/json')
-        .send(mockContent);
-        UsersTest.contentId = res.body.data._id;
+			res = await chai.request(server.instance)
+				.post(`/location`)
+				.set('Content-Type', 'application/json')
+				.send(mockLocation);
+			locationId = res.body.data._id;
 
-        res = await chai.request(server.instance)
-        .post(`/location`)
-        .set('Content-Type', 'application/json')
-        .send(mockLocation);
-        UsersTest.locationId = res.body.data._id;
+			res = await chai.request(server.instance)
+				.post(`/location`)
+				.set('Content-Type', 'application/json')
+				.send(mockLocation2);
+			location2Id = res.body.data._id;
 
-        res = await chai.request(server.instance)
-        .post(`/location`)
-        .set('Content-Type', 'application/json')
-        .send(mockLocation2);
-        UsersTest.location2Id = res.body.data._id;
+			res = await chai.request(server.instance)
+				.post(`/location`)
+				.set('Content-Type', 'application/json')
+				.send(mockLocation3);
+			location3Id = res.body.data._id;
 
-        res = await chai.request(server.instance)
-        .post(`/location`)
-        .set('Content-Type', 'application/json')
-        .send(mockLocation3);
-        UsersTest.location3Id = res.body.data._id;
+			await chai.request(server.instance)
+				.put(`/location/${locationId}/${contentId}`)
+				.set('Content-Type', 'application/json');
 
-        await chai.request(server.instance)
-        .put(`/location/${UsersTest.locationId}/${UsersTest.contentId}`)
-        .set('Content-Type', 'application/json');
+			res = await chai.request(server.instance)
+				.post(`/activity`)
+				.set('Content-Type', 'application/json')
+				.send(mockActivity);
+			activityId = res.body.data._id;
 
-        res = await chai.request(server.instance)
-        .post(`/activity`)
-        .set('Content-Type', 'application/json')
-        .send(mockActivity);
-        UsersTest.activityId = res.body.data._id;
+			await chai.request(server.instance)
+				.put(`/activity/${activityId}`)
+				.set('Content-Type', 'application/json')
+				.send({
+					"locations": [locationId, location2Id, location3Id]
+				});
+		} catch (err) { throw err; }
+	})
 
-        await chai.request(server.instance)
-        .put(`/activity/${UsersTest.activityId}`)
-        .set('Content-Type', 'application/json')
-        .send({
-            "locations": [UsersTest.locationId, UsersTest.location2Id, UsersTest.location3Id]
-        });
-    }
+	after(async () => await server.shutdown())
 
-    @test("/POST user - Should create a new user")
-    public async create() {
-        try {
-            const res = await chai.request(server.instance)
-            .post(`/user`)
-            .set('Content-Type', 'application/json')
-            .send(mockUser);
+	it('Should create a new user', async () => {
+		try {
+			const res = await chai.request(server.instance)
+				.post(`/user`)
+				.set('Content-Type', 'application/json')
+				.send(mockUser);
 
-            assert.equal(res.status, 201, 'The http code is wrong');
-            assert.equal(res.body.data.username, mockUser.username, 'The username is wrong');
-            assert.equal(res.body.data.name.firstName, mockUser.name.firstName, 'The first name is wrong');
-            assert.equal(res.body.data.name.lastName, mockUser.name.lastName, 'The last name is wrong');
-            assert.equal(res.body.data.email, mockUser.email, 'The e-mail is wrong');
-        } catch (err) { throw err; }
-    }
+			assert.equal(res.status, 201, 'The http code is wrong');
+			assert.equal(res.body.data.username, mockUser.username, 'The username is wrong');
+			assert.equal(res.body.data.name.firstName, mockUser.name.firstName, 'The first name is wrong');
+			assert.equal(res.body.data.name.lastName, mockUser.name.lastName, 'The last name is wrong');
+			assert.equal(res.body.data.email, mockUser.email, 'The e-mail is wrong');
+		} catch (err) { throw err; }
+	})
 
-    @test("/POST user - Should log in")
-    public async login() {
-        try {
-            const res = await chai.request(server.instance)
-            .post(`/login`)
-            .set('Content-Type', 'application/json')
-            .send(credentials);
+	it('Should log in', async () => {
+		try {
+			const res = await chai.request(server.instance)
+				.post(`/login`)
+				.set('Content-Type', 'application/json')
+				.send(credentials);
 
-            assert.equal(res.status, 200, 'The http code is wrong');
-            UsersTest.token = res.body.data.token;
-        } catch (err) { throw err; }
-    }
+			assert.equal(res.status, 200, 'The http code is wrong');
+			token = res.body.data.token;
+		} catch (err) { throw err; }
+	})
 
-    @test("/POST user - Should info from the logged user")
-    public async getUser() {
-        try {
-            const res = await chai.request(server.instance)
-            .get(`/user`)
-            .set('Authorization', `Bearer ${UsersTest.token}`)
-            .set('Content-Type', 'applicaiton/json');
+	it('Should show info from the logged user', async () => {
+		try {
+			const res = await chai.request(server.instance)
+				.get(`/user`)
+				.set('Authorization', `Bearer ${token}`)
+				.set('Content-Type', 'applicaiton/json');
 
-            assert.equal(res.status, 200, 'The http code is wrong');
-            assert.equal(res.body.data.username, mockUser.username, 'The username is wrong');
-            assert.equal(res.body.data.name.firstName, mockUser.name.firstName, 'The first name is wrong');
-            assert.equal(res.body.data.name.lastName, mockUser.name.lastName, 'The last name is wrong');
-            assert.equal(res.body.data.email, mockUser.email, 'The e-mail is wrong');
-        } catch (err) { throw err; }
-    }
+			assert.equal(res.status, 200, 'The http code is wrong');
+			assert.equal(res.body.data.username, mockUser.username, 'The username is wrong');
+			assert.equal(res.body.data.name.firstName, mockUser.name.firstName, 'The first name is wrong');
+			assert.equal(res.body.data.name.lastName, mockUser.name.lastName, 'The last name is wrong');
+			assert.equal(res.body.data.email, mockUser.email, 'The e-mail is wrong');
+		} catch (err) { throw err; }
+	})
 
-    @test("/DELTE user - Should delete an logged user")
-    public async remove() {
-        try {
-            const res = await chai.request(server.instance)
-            .del(`/user`)
-            .set('Authorization', `Bearer ${UsersTest.token}`)
-            .set('Content-Type', 'application/json')
+	it('Should delete an logged user', async () => {
+		try {
+			const res = await chai.request(server.instance)
+				.del(`/user`)
+				.set('Authorization', `Bearer ${token}`)
+				.set('Content-Type', 'application/json')
 
-            assert.equal(res.status, 201, 'The http code is wrong')
-            assert.equal(await UserModel.findById(UsersTest.userId), undefined, 'The user is not undefined');
-        } catch (err) { throw err; }
-    }
-
-    public static after() { server.shutdown(); }
-}
+			assert.equal(res.status, 204, 'The http code is wrong')
+			assert.equal(await UserModel.findById(userId), undefined, 'The user is not undefined');
+		} catch (err) { throw err; }
+	})
+})

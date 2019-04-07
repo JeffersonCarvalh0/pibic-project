@@ -17,7 +17,6 @@ export class UserController {
 
     public static async register(req: Request, res: Response) {
         try {
-            console.log(req.body);
             let user: IUser = new UserModel(req.body);
 
             user.save((err: Error, doc: IUser) => {

@@ -23,12 +23,12 @@ class MyServer {
     }
 
     /** Starts the server */
-    public start() {
+    public async start() {
         if (this.running)
             console.log('The server is already started and running at port 3000.');
         else {
             this.instance = createServer(this.app.app);
-            this.app.start();
+            await this.app.start();
             this.instance.listen(process.env.PORT || 3000);
             console.log("Started server at port 3000.");
             this.running = true;
@@ -36,8 +36,8 @@ class MyServer {
     }
 
     /** Closes the server's connections and shut it down */
-    public shutdown() {
-        this.app.shutdown();
+    public async shutdown() {
+        await this.app.shutdown();
         this.instance.close();
         this.running = false;
         console.log('Server is now offline.');

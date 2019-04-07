@@ -31,14 +31,14 @@ export class App {
     }
 
     /** Starts the app */
-    public start() {
+    public async start() {
         if (this.running) console.log('The app is already started.');
         else {
             // Start middlewares
             this.middlewares();
 
             // Start and set up the database
-            this.db()
+            await this.db()
 
             // Setup the router
             this.routes();
@@ -59,13 +59,19 @@ export class App {
         UserRoutes.create(this.router);
     }
 
-    private db() {
-			mongoose.connect(config.DBHost, {
-				useNewUrlParser: true,
-				useCreateIndex: true,
-				useFindAndModify: false,
-			}).then(() => console.log(`Successfuly connected with mongodb at host ${config.DBHost}`))
-        .catch((err: Error) => console.log(`The following error has ocurred when trying to connect with the database: ${err}`));
+    private async db() {
+			try {
+				await mongoose.connect(config.DBHost, {
+					useNewUrlParser: true,
+					useCreateIndex: true,
+					useFindAndModify: false,
+				})
+
+				console.log(`Successfuly connected with mongodb at host ${config.DBHost}`)
+
+			} catch (err) {
+				console.log(`The following error has ocurred when trying to connect with the database: ${err}`)
+			}
     }
 
     public middlewares() {
@@ -90,8 +96,8 @@ export class App {
     }
 
     /** Closes all opened connections */
-    public shutdown() {
-        mongoose.connection.close();
+    public async shutdown() {
+        await mongoose.connection.close();
         this.running = false;
     }
 }
