@@ -8,7 +8,9 @@
     "postinstall": "yarn build",
     "start": "NODE_ENV=prod node dist/server.js",
     "start-dev": "NODE_ENV=dev nodemon",
-    "test": "NODE_ENV=test mocha --exit -r ts-node/register src/test/*.ts"
+    "test": "NODE_ENV=test mocha --exit -r ts-node/register src/test/*.ts",
+    "lint": "tslint --fix --project .",
+    "lint:staged": "lint-staged"
   },
   "author": "Jefferson Carvalho",
   "license": "MIT",
@@ -39,9 +41,22 @@
     "@types/passport-jwt": "^3.0.1",
     "@types/passport-local": "^1.0.33",
     "chai": "^4.1.2",
+    "lint-staged": "^8.1.5",
     "mocha": "^6.0.2",
     "nodemon": "^1.17.4",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.16.4",
     "ts-node": "^8.0.3",
+    "tslint": "^5.15.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.4.2"
+  },
+  "pre-commit": "lint:staged",
+  "lint-staged": {
+    "*.{ts,.spec.tsx}": [
+      "yarn lint",
+      "git add"
+    ]
   }
 }

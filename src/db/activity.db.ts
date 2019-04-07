@@ -1,36 +1,35 @@
-import mongoose from 'mongoose';
-import { Schema, Document, Model, model } from 'mongoose';
+import mongoose, { Document, Model, model, Schema } from 'mongoose'
 
-import { ILocation } from './location.db';
-import { IContent } from './content.db';
+import { IContent } from './content.db'
+import { ILocation } from './location.db'
 
 export interface IActivity extends Document {
-    title: string;
-    description: string;
-    location: ILocation;
-    content: IContent
+  title: string
+  description: string
+  location: ILocation
+  content: IContent
 }
 
-export var ActivitySchema: Schema = new Schema({
-    title: {
-        type: String,
-        required: true
-    },
+export let ActivitySchema: Schema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
 
-    description: {
-        type: String,
-        required: true
-    },
+  description: {
+    type: String,
+    required: true,
+  },
 
-    location: {
-        type: Schema.Types.ObjectId,
-        ref: 'Location'
-    },
+  location: {
+    type: Schema.Types.ObjectId,
+    ref: 'Location',
+  },
 
-    content: {
-        type: Schema.Types.ObjectId,
-        ref: 'Content'
-    }
-});
+  content: {
+    type: Schema.Types.ObjectId,
+    ref: 'Content',
+  },
+})
 
-export const ActivityModel: Model<IActivity> = model<IActivity>("Activity", ActivitySchema);
+export const ActivityModel: Model<IActivity> = model<IActivity>('Activity', ActivitySchema)

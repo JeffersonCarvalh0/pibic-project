@@ -1,51 +1,55 @@
 /** Interface of the configuration object */
 interface IConfig {
-    /** The database URI. */
-    DBHost: string
+  /** The database URI. */
+  DBHost: string
 
-    /** morgan settings */
-    LOGGER: string
+  /** morgan settings */
+  LOGGER: string
 
-    /** Application secret */
-    SECRET: string // The secret used in production should not be stored directly here.
+  /** Application secret */
+  SECRET: string // The secret used in production should not be stored directly here.
 
-    /** bcrypt settings */
-    SALT_ROUNDS: number
+  /** bcrypt settings */
+  SALT_ROUNDS: number
 }
 
 /** Configurations for development */
 const dev: IConfig = {
-    DBHost: 'mongodb://localhost/pibic',
-    LOGGER: 'dev',
-    SECRET: 'kittens',
-    SALT_ROUNDS: 10
+  DBHost: 'mongodb://localhost/pibic',
+  LOGGER: 'dev',
+  SECRET: 'kittens',
+  SALT_ROUNDS: 10,
 }
 
 /** Configurations for tests */
 const test: IConfig = {
-    DBHost: 'mongodb://localhost/pibic-test',
-    LOGGER: '',
-    SECRET: 'kittens',
-    SALT_ROUNDS: 10
+  DBHost: 'mongodb://localhost/pibic-test',
+  LOGGER: '',
+  SECRET: 'kittens',
+  SALT_ROUNDS: 10,
 }
 
 /** Configurations for production */
 const prod: IConfig = {
-    DBHost: process.env.MONGOLAB_URI || "",
-    LOGGER: 'combined',
-    SECRET: process.env.SECRET || "kittens",
-    SALT_ROUNDS: 12
+  DBHost: process.env.MONGOLAB_URI || '',
+  LOGGER: 'combined',
+  SECRET: process.env.SECRET || 'kittens',
+  SALT_ROUNDS: 12,
 }
 
 /** Interface for the object that stores the configurations */
-interface IConfigs { 'dev': IConfig, 'test': IConfig, 'prod': IConfig }
+interface IConfigs {
+  dev: IConfig
+  test: IConfig
+  prod: IConfig
+}
 
 /** The object that holds the configurations */
 const config: IConfigs = {
-    'dev': dev,
-    'test': test,
-    'prod': prod
+  dev,
+  test,
+  prod,
 }
 
 // Exports the right configuration based on NODE_ENV variable
-export default config[<keyof IConfigs>process.env.NODE_ENV];
+export default config[process.env.NODE_ENV as keyof IConfigs]
