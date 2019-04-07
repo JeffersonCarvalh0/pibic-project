@@ -60,9 +60,12 @@ export class App {
     }
 
     private db() {
-        mongoose.connect(config.DBHost)
-            .then(() => console.log(`Successfuly connected with mongodb at host ${config.DBHost}`))
-            .catch((err: Error) => console.log(`The following error has ocurred when trying to connect with the database: ${err}`));
+			mongoose.connect(config.DBHost, {
+				useNewUrlParser: true,
+				useCreateIndex: true,
+				useFindAndModify: false,
+			}).then(() => console.log(`Successfuly connected with mongodb at host ${config.DBHost}`))
+        .catch((err: Error) => console.log(`The following error has ocurred when trying to connect with the database: ${err}`));
     }
 
     public middlewares() {
