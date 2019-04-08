@@ -1211,7 +1211,7 @@ Calculates the distance between two coordinates using haversine formula
     {
         "data": {
             distance: 40091.09306380423,
-						near: true
+            near: true
         },
     }
     ```
