@@ -1213,6 +1213,7 @@ Calculates the distance between two coordinates using haversine formula
             distance: 40091.09306380423,
             near: true
         },
+        errors: null
     }
     ```
 
