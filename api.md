@@ -1222,10 +1222,10 @@ Calculates the distance between two coordinates using haversine formula
     **Content:**
     ```
     {
-				"data": null,
-				"errors": {
-						"message": "The parameters are incorrect"
-				}
+        "data": null,
+        "errors": {
+            "message": "The parameters are incorrect"
+        }
     }
     ```
 
@@ -1241,7 +1241,7 @@ Calculates the distance between two coordinates using haversine formula
 * **Notes:**
 
   Both coordinate fields are required. `threshold` can be ignored if you are not going to use it.
-  The coordinate fields field must be an numeric array with two elements, where the first
+  Each coordinate field must be an numeric array with two elements, where the first
   one is the longitude and the second one is the latitude of the coordinate.
 	The distance measurement unit is meters. The `threshold` is expected to be in meters too.
 
