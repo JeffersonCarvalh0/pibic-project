@@ -5,7 +5,6 @@
   "main": "/dist/server.js",
   "scripts": {
     "build": "tsc",
-    "postinstall": "yarn build",
     "start": "NODE_ENV=prod node dist/server.js",
     "start-dev": "NODE_ENV=dev nodemon",
     "test": "NODE_ENV=test mocha --exit -r ts-node/register src/test/*.ts",
