@@ -115,4 +115,26 @@ describe('Locations', () => {
       throw err
     }
   })
+
+  it('Should calculate the distance between two coordinates correctly', async () => {
+    const data = {
+      location1: [0.7, 0.8],
+      location2: [0.9, 0.5],
+      threshold: 50000,
+    }
+
+    try {
+      const res = await chai
+        .request(server.instance)
+        .post(`/location/distance`)
+        .set('Content-Type', 'application/json')
+        .send(data)
+
+      assert.equal(res.status, 200, 'The http code is wrong')
+      assert.closeTo(res.body.data.distance, 40091, 0.1, 'The distance is wrong')
+      assert.equal(res.body.data.near, true, 'The near field is wrong')
+    } catch (err) {
+      throw err
+    }
+  })
 })

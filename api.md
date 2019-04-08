@@ -17,6 +17,7 @@
     * [Create an Location](#create-a-location)
     * [Update an Location](#update-a-location)
     * [Delete an Location](#delete-a-location)
+		* [Calculate distance](#calculate-distance)
 * [Users](#users)
     * [Log in](#log-in)
     * [Create an User](#create-an-user)
@@ -1175,6 +1176,74 @@ Updates a location in the database.
 
   The `id` paramater at the url must be an MongoDB `ObjectId`.
 
+
+**Calculate distance**
+----
+Calculates the distance between two coordinates using haversine formula
+
+* **URL**
+
+  /location/distance
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+    ```
+    {
+        "location1": [ 0.7, 0.8 ] // [longitude, latitude]
+        "location2": [ 0.9, 0.5 ]
+        "threshold": 50000
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:**
+    ```
+    {
+        "data": {
+            distance: 40091.09306380423,
+						near: true
+        },
+    }
+    ```
+
+* **Error Response:**
+
+  * **Code:** 406 NOT ACCEPTABLE <br />
+    **Content:**
+    ```
+    {
+				"data": null,
+				"errors": {
+						"message": "The parameters are incorrect"
+				}
+    }
+    ```
+
+* **Sample Call:**
+
+    ```
+    curl --header "Content-Type: application/json" \
+    --request POST \
+    --data '{ "location1": [0.7, 0.8], "location2": [0.9, 0.5], "threshold": 50000 }' \
+    https://pibic-project.herokuapp.com/location/distance
+    ```
+
+* **Notes:**
+
+  Both coordinate fields are required. `threshold` can be ignored if you are not going to use it.
+  The coordinate fields field must be an numeric array with two elements, where the first
+  one is the longitude and the second one is the latitude of the coordinate.
+	The distance measurement unit is meters. The `threshold` is expected to be in meters too.
 
 # **Users**
 ## **Log in**

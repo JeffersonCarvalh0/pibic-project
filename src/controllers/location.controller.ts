@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import haversine from 'haversine'
 
 import { ContentModel } from '../db/content.db'
 import { ILocation, ILocationUser, LocationModel } from '../db/location.db'
@@ -105,6 +106,23 @@ export class LocationController {
       res.json()
     } else {
       res.json({ data: null, errors })
+    }
+  }
+
+  public static calculateDistance(req: Request, res: Response) {
+    const location1 = req.body.location1
+    const location2 = req.body.location2
+    const threshold = req.body.threshold
+
+    res.statusCode = 406
+
+    if (location1[0] && location1[1] && location2[0] && location2[1]) {
+      res.statusCode = 200
+      const distance = haversine(location1, location2, { format: '[lon,lat]', unit: 'meter' })
+      const near = distance <= threshold
+      res.json({ data: { distance, near }, errors: null })
+    } else {
+      res.json({ data: null, errors: { message: 'The parameters are incorrect' } })
     }
   }
 }
