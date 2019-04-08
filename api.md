@@ -17,7 +17,7 @@
     * [Create an Location](#create-a-location)
     * [Update an Location](#update-a-location)
     * [Delete an Location](#delete-a-location)
-		* [Calculate distance](#calculate-distance)
+    * [Calculate distance](#calculate-distance)
 * [Users](#users)
     * [Log in](#log-in)
     * [Create an User](#create-an-user)
