@@ -55,6 +55,7 @@ Returns all Activities in the database.
                 "_id": "5bd6569146822278e56b273d",
                 "title": "activity",
                 "description": "just passing by",
+                "threshold": 42,
                 "location": {
                     "coord": {
                         "coordinates": [
@@ -122,6 +123,7 @@ None
             "_id": "5bd6569146822278e56b273d",
             "title": "activity",
             "description": "just passing by",
+            "threshold": 42,
             "location": {
                 "coord": {
                     "coordinates": [
@@ -208,6 +210,7 @@ Creates a new Activity object in the database.
     {
         "title": "here goes the title",
         "description": "here goes the description"
+        "threshold": 42,
         "location": "5bd64e8746822278e56b273a"
         "content": "5bd64978548393772fbc0c47"
     }
@@ -223,6 +226,7 @@ Creates a new Activity object in the database.
             "_id": "5bd6569146822278e56b273d",
             "title": "activity",
             "description": "just passing by",
+            "threshold": 42,
             "location": {
                 "coord": {
                     "coordinates": [
@@ -282,13 +286,13 @@ Creates a new Activity object in the database.
   ```
   curl --header "Content-Type: application/json" \
   --request POST \
-  --data '{"title": "activity", "description": "just passing by", "location": "5bd64e8746822278e56b273a", "content": "5bd64978548393772fbc0c47"}' \
+  --data '{"title": "activity", "description": "just passing by", "threshold": 42, "location": "5bd64e8746822278e56b273a", "content": "5bd64978548393772fbc0c47"}' \
   https://pibic-project.herokuapp.com/activity
   ```
 
 * **Notes:**
 
-  The `title` parameter in the request body is required.
+  The `title`, `desription` and `threshold` parameters in the request body are required.
   `location` and `content` properties are MongoDB `ObjectId`s.
 
 

@@ -8,6 +8,7 @@ export interface IActivity extends Document {
   description: string
   location: ILocation
   content: IContent
+  threshold: number
 }
 
 export let ActivitySchema: Schema = new Schema({
@@ -29,6 +30,11 @@ export let ActivitySchema: Schema = new Schema({
   content: {
     type: Schema.Types.ObjectId,
     ref: 'Content',
+  },
+
+  threshold: {
+    type: Number,
+    required: true,
   },
 })
 

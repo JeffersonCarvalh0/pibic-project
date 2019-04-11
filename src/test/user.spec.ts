@@ -30,7 +30,7 @@ describe('Users', () => {
   const mockLocation2 = { name: 'test2', coord: [0.8, 0.9] }
   const mockLocation3 = { name: 'test3', coord: [0.6, 0.7] }
   const mockContent = { description: 'An awesome test!', correct: 'Yay', wrong: 'Nah' }
-  const mockActivity = { title: 'activity', description: 'just passing by' }
+  const mockActivity = { title: 'activity', description: 'just passing by', threshold: 42 }
 
   let userId: string
   let contentId: string
