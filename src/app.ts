@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import express, { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
@@ -60,6 +61,8 @@ export class App {
   }
 
   public middlewares() {
+    this.instance.use(cors())
+
     // Parse json requests
     this.instance.use(bodyParser.json())
 
