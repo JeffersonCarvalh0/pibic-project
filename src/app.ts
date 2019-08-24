@@ -71,14 +71,14 @@ export class App {
       this.instance.use(
         morgan(config.LOGGER, {
           skip: (req: Request, res: Response) => res.statusCode < 400,
-          stream: process.stderr,
+          stream: process.stdout,
         }),
       )
 
       this.instance.use(
         morgan(config.LOGGER, {
           skip: (req: Request, res: Response) => res.statusCode >= 400,
-          stream: process.stdout,
+          stream: process.stderr,
         }),
       )
     }

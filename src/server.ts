@@ -30,7 +30,7 @@ class MyServer {
       this.instance = createServer(this.app.instance)
       await this.app.start()
       this.instance.listen(process.env.PORT || 3000)
-      console.log('Started server at port 3000.')
+      console.log(`Started server at port ${process.env.PORT || 3000}.`)
       this.running = true
     }
   }
@@ -38,7 +38,7 @@ class MyServer {
   /** Closes the server's connections and shut it down */
   public async shutdown() {
     await this.app.shutdown()
-    this.instance.close()
+    await this.instance.close()
     this.running = false
     console.log('Server is now offline.')
   }
@@ -46,4 +46,4 @@ class MyServer {
 
 // Runs the server
 export const server = new MyServer(app)
-server.start()
+;async () => server.start()

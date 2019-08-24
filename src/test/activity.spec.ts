@@ -1,7 +1,5 @@
 import chai, { assert } from 'chai'
 import chaiHttp from 'chai-http'
-import mocha from 'mocha'
-import mongoose from 'mongoose'
 
 import { ActivityModel } from '../db/activity.db'
 import { ContentModel } from '../db/content.db'
