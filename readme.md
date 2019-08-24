@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/JeffersonCarvalh0/pibic-project.svg?style=shield)](https://circleci.com/gh/JeffersonCarvalh0/pibic-project)
+
 # ts-rest-boilerplate
 This is a boilerplate for REST APIs written in TypeScript and built with Express
 which uses MongoDB as its database.
