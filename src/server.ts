@@ -46,4 +46,4 @@ class MyServer {
 
 // Runs the server
 export const server = new MyServer(app)
-;async () => server.start()
+process.env.NODE_ENV === 'test' ? async () => server.start() : server.start()
