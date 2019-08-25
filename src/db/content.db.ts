@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, model, Schema } from 'mongoose'
+import { Document, Model, model, Schema } from 'mongoose'
 
 export interface IContent extends Document {
   description: string
@@ -6,18 +6,13 @@ export interface IContent extends Document {
   wrong: string
 }
 
-export let ContentSchema: Schema = new Schema({
+export const ContentSchema: Schema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+
   description: {
-    type: String,
-    required: true,
-  },
-
-  correct: {
-    type: String,
-    required: true,
-  },
-
-  wrong: {
     type: String,
     required: true,
   },

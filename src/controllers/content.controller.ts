@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { ContentModel, IContent } from '../db/content.db'
 
 export class ContentController {
-  public static getAll(req: Request, res: Response) {
+  public static getAll(_: Request, res: Response) {
     ContentModel.find({}, (err: Error, docs: IContent[]) => {
       res.status(200).json({ data: docs, errors: err })
     })

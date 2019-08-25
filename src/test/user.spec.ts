@@ -1,6 +1,5 @@
 import chai, { assert } from 'chai'
 import chaiHttp from 'chai-http'
-import mongoose from 'mongoose'
 
 import { ActivityModel } from '../db/activity.db'
 import { ContentModel } from '../db/content.db'
@@ -29,7 +28,7 @@ describe('Users', () => {
   const mockLocation = { name: 'test', coord: [1.5, 1.0] }
   const mockLocation2 = { name: 'test2', coord: [0.8, 0.9] }
   const mockLocation3 = { name: 'test3', coord: [0.6, 0.7] }
-  const mockContent = { description: 'An awesome test!', correct: 'Yay', wrong: 'Nah' }
+  const mockContent = { title: 'An awesome title!', description: 'An awesome test!' }
   const mockActivity = { title: 'activity', description: 'just passing by', threshold: 42 }
 
   let userId: string

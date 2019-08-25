@@ -10,7 +10,7 @@ chai.use(chaiHttp)
 
 describe('Activities', () => {
   const mockLocation = { name: 'test', coord: [1.5, 1.0] }
-  const mockContent = { description: 'An awesome test!', correct: 'Yay', wrong: 'Nah' }
+  const mockContent = { title: 'An awesome title!', description: 'An awesome test!' }
   const mockActivity = { title: 'activity', description: 'just passing by', threshold: 42 }
 
   let contentId: string
