@@ -11,7 +11,7 @@ chai.use(chaiHttp)
 describe('Activities', () => {
   const mockLocation = { name: 'test', coord: [1.5, 1.0] }
   const mockContent = { title: 'An awesome title!', description: 'An awesome test!' }
-  const mockActivity = { title: 'activity', description: 'just passing by', threshold: 42 }
+  const mockActivity = { title: 'activity', description: 'just passing by' }
 
   let contentId: string
   let locationId: string
@@ -70,7 +70,6 @@ describe('Activities', () => {
       assert.equal(res.status, 201, 'The http code is wrong')
       assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong')
       assert.equal(res.body.data.description, mockActivity.description, 'The description is wrong')
-      assert.equal(res.body.data.threshold, mockActivity.threshold, 'The threshold is wrong')
       assert.typeOf(res.body.errors, 'null', `${res.body.errors}`)
       activityId = res.body.data._id
     } catch (err) {
@@ -88,7 +87,6 @@ describe('Activities', () => {
       assert.equal(res.status, 200, 'The http code is wrong')
       assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong')
       assert.equal(res.body.data.description, mockActivity.description, 'The description is wrong')
-      assert.equal(res.body.data.threshold, mockActivity.threshold, 'The threshold is wrong')
       assert.equal(res.body.data._id, activityId, 'The id is wrong')
       assert.typeOf(res.body.errors, 'null', `${res.body.errors}`)
     } catch (err) {
@@ -111,7 +109,6 @@ describe('Activities', () => {
       assert.equal(res.status, 200, 'The http code is wrong')
       assert.equal(res.body.data.title, mockActivity.title, 'The title is wrong')
       assert.equal(res.body.data.description, 'description updated', 'The description is wrong')
-      assert.equal(res.body.data.threshold, mockActivity.threshold, 'The threshold is wrong')
       assert.equal(res.body.data.location._id, locationId, "The activity's id is wrong")
       assert.equal(res.body.data.content._id, contentId, "The content's id is wrong")
       assert.equal(res.body.data._id, activityId, 'The id is wrong')
