@@ -1,9 +1,8 @@
 import { Document, Model, model, Schema } from 'mongoose'
 
 export interface IContent extends Document {
+  title: string
   description: string
-  correct: string
-  wrong: string
 }
 
 export const ContentSchema: Schema = new Schema({
