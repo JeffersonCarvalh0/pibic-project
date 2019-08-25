@@ -71,9 +71,8 @@ Returns all Activities in the database.
                 },
                 "content": {
                     "_id": "5bd64978548393772fbc0c47",
+                    "title": "An awesome title!",
                     "description": "An awesome test!",
-                    "correct": "Way to go, dude. You got it right!",
-                    "wrong": "Damn, son. Try that again, would ya?",
                     "__v": 0
                 },
                 "__v": 0
@@ -139,9 +138,8 @@ None
             },
             "content": {
                 "_id": "5bd64978548393772fbc0c47",
+                "title": "An awesome title!",
                 "description": "An awesome test!",
-                "correct": "Way to go, dude. You got it right!",
-                "wrong": "Damn, son. Try that again, would ya?",
                 "__v": 0
             },
             "__v": 0
@@ -209,9 +207,9 @@ Creates a new Activity object in the database.
     ```
     {
         "title": "here goes the title",
-        "description": "here goes the description"
+        "description": "here goes the description",
         "threshold": 42,
-        "location": "5bd64e8746822278e56b273a"
+        "location": "5bd64e8746822278e56b273a",
         "content": "5bd64978548393772fbc0c47"
     }
     ```
@@ -242,9 +240,8 @@ Creates a new Activity object in the database.
             },
             "content": {
                 "_id": "5bd64978548393772fbc0c47",
+                "title": "An awesome title!",
                 "description": "An awesome test!",
-                "correct": "Way to go, dude. You got it right!",
-                "wrong": "Damn, son. Try that again, would ya?",
                 "__v": 0
             },
             "__v": 0
@@ -347,9 +344,8 @@ Updates an Activity from the database.
             },
             "content": {
                 "_id": "5bd64978548393772fbc0c47",
+                "title": "An awesome title!",
                 "description": "An awesome test!",
-                "correct": "Way to go, dude. You got it right!",
-                "wrong": "Damn, son. Try that again, would ya?",
                 "__v": 0
             },
             "__v": 0
@@ -484,9 +480,8 @@ Deletes an Activity from the database.
         "data": [
         {
             "_id": "5bd64978548393772fbc0c47",
+            "title": "An awesome title!",
             "description": "An awesome test!",
-            "correct": "Way to go, dude. You got it right!",
-            "wrong": "Damn, son. Try that again, would ya?",
             "__v": 0
         },
         ...],
@@ -533,9 +528,8 @@ Deletes an Activity from the database.
     {
         "data": {
             "_id": "5bd64978548393772fbc0c47",
+            "title": "An awesome title!",
             "description": "An awesome test!",
-            "correct": "Way to go, dude. You got it right!",
-            "wrong": "Damn, son. Try that again, would ya?",
             "__v": 0
         },
         "errors": null
@@ -601,9 +595,8 @@ Creates a new Content object in the database.
 
     ```
     {
+        "title": "The content's title",
         "description": "The content's description",
-        "correct": "Message to be shown if correct",
-        "wrong": "Message to be shown if wrong"
     }
     ```
 
@@ -615,9 +608,8 @@ Creates a new Content object in the database.
     {
         "data": {
             "_id": "5bd64978548393772fbc0c47",
+            "title": "An awesome title!",
             "description": "An awesome test!",
-            "correct": "Way to go, dude. You got it right!",
-            "wrong": "Damn, son. Try that again, would ya?",
             "__v": 0
         },
         "errors": null
@@ -657,13 +649,13 @@ Creates a new Content object in the database.
     ```
     curl --header "Content-Type: application/json" \
     --request POST \
-    --data '{ "description": "An awesome test!", "correct": "Way to go, dude. You got it right!", "wrong": "Damn, son. Try that again, would ya?" }' \
+    --data '{ "title": "An awesome title!", "description": "An awesome test!" }' \
     https://pibic-project.herokuapp.com/content
     ```
 
 * **Notes:**
 
-  All of the three parameters are required.
+  Both parameters are required.
 
 **Update a Content**
 ----
@@ -685,9 +677,8 @@ Updates a content in the database.
 
     ```
     {
+        "title": "The content's title",
         "description": "The content's description",
-        "correct": "Message to be shown if correct",
-        "wrong": "Message to be shown if wrong"
     }
     ```
 
@@ -699,9 +690,8 @@ Updates a content in the database.
     {
         "data": {
             "_id": "5b7d60ad6e4f7b17385325f1",
-            "description": "edited description",
-            "correct": "Way to go, dude. You got it right!",
-            "wrong": "Damn, son. Try that again, would ya?",
+            "title": "posibly edited title",
+            "description": "possibly edited description",
             "__v": 0
         },
         "errors": null
@@ -736,7 +726,7 @@ Updates a content in the database.
 
 * **Notes:**
 
-  The `id` paramater at the url must be an MongoDB `ObjectId`.
+  The `id` paramater at the url must be a MongoDB `ObjectId`.
 
 
 **Delete a Content**
@@ -803,7 +793,7 @@ Updates a content in the database.
 
 * **Notes:**
 
-  The `id` paramater at the url must be an MongoDB `ObjectId`.
+  The `id` paramater at the url must be a MongoDB `ObjectId`.
 
 
 # **Locations**
