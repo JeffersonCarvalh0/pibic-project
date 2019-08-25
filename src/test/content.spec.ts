@@ -1,7 +1,5 @@
 import chai, { assert } from 'chai'
 import chaiHttp from 'chai-http'
-import mocha from 'mocha'
-import mongoose from 'mongoose'
 
 import { ContentModel } from '../db/content.db'
 import { server } from '../server'
@@ -12,9 +10,8 @@ describe('Contents', () => {
   let contentId: string
 
   const mockContent = {
+    title: 'An awesome title!',
     description: 'An awesome test!',
-    correct: 'Way to go, dude. You got it right!',
-    wrong: 'Damn, son. Try that again, would ya?',
   }
 
   before(async () => {
@@ -52,9 +49,8 @@ describe('Contents', () => {
         .send(mockContent)
 
       assert.equal(res.status, 201, 'The http code is wrong')
+      assert.equal(res.body.data.title, mockContent.title, 'The title is wrong')
       assert.equal(res.body.data.description, mockContent.description, 'The description is wrong')
-      assert.equal(res.body.data.correct, mockContent.correct, 'The correct field is wrong')
-      assert.equal(res.body.data.wrong, mockContent.wrong, 'The wrong field is wrong') // lol
       assert.typeOf(res.body.errors, 'null', `${res.body.errors}`)
       contentId = res.body.data._id
     } catch (err) {
@@ -70,9 +66,8 @@ describe('Contents', () => {
         .set('Content-Type', 'application/json')
 
       assert.equal(res.status, 200, 'The http code is wrong')
+      assert.equal(res.body.data.title, mockContent.title, 'The title is wrong')
       assert.equal(res.body.data.description, mockContent.description, 'The description is wrong')
-      assert.equal(res.body.data.correct, mockContent.correct, 'The correct field is wrong')
-      assert.equal(res.body.data.wrong, mockContent.wrong, 'The wrong field is wrong') // lol
       assert.typeOf(res.body.errors, 'null', `${res.body.errors}`)
     } catch (err) {
       throw err
@@ -88,9 +83,8 @@ describe('Contents', () => {
         .send({ description: 'An even better test!!!' })
 
       assert.equal(res.status, 200, 'The http code is wrong')
+      assert.equal(res.body.data.title, mockContent.title, 'The title is wrong')
       assert.equal(res.body.data.description, 'An even better test!!!', 'The description is wrong')
-      assert.equal(res.body.data.correct, mockContent.correct, 'The correct field is wrong')
-      assert.equal(res.body.data.wrong, mockContent.wrong, 'The wrong field is wrong') // lol
       assert.typeOf(res.body.errors, 'null', `${res.body.errors}`)
     } catch (err) {
       throw err
