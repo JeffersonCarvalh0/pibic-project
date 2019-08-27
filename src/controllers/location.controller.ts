@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import haversine from 'haversine'
 
-import { ContentModel } from '../db/content.db'
 import { ILocation, ILocationUser, LocationModel } from '../db/location.db'
 
 async function toUser(doc: ILocation): Promise<ILocationUser> {
@@ -27,13 +26,11 @@ const toDB = (obj: ILocationUser) => {
     location.coord = { type: 'Point', coordinates: location.coord }
   }
 
-  // console.log(location);
-
   return location
 }
 
 export class LocationController {
-  public static async getAll(req: Request, res: Response) {
+  public static async getAll(_: Request, res: Response) {
     LocationModel.find({}, async (err: Error, docs: ILocation[]) => {
       res.status(200).json({ data: await Promise.all(docs.map(toUser)), errors: err })
     })

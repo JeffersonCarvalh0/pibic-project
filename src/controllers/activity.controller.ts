@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { ActivityModel, IActivity } from '../db/activity.db'
 
 export class ActivityController {
-  public static getAll(req: Request, res: Response) {
+  public static getAll(_: Request, res: Response) {
     ActivityModel.find({}, async (err: Error, docs: IActivity[]) => {
       for (const doc of docs) {
         await doc
@@ -43,7 +43,6 @@ export class ActivityController {
   }
 
   public static update(req: Request, res: Response) {
-    const conditions = { _id: req.params.id }
     ActivityModel.findOneAndUpdate(
       req.params.id,
       req.body,
