@@ -1,6 +1,4 @@
-import mongoose, { Document, Model, model, Schema } from 'mongoose'
-
-import { IContent } from './content.db'
+import { Document, Model, model, Schema } from 'mongoose'
 
 export interface ILocation extends Document {
   name: string
@@ -24,10 +22,12 @@ export let LocationSchema: Schema = new Schema({
 
   description: {
     type: String,
+    default: '',
   },
 
   coord: {
     type: { type: String },
+    required: true,
     coordinates: [Number], // [longitude, latitude]
   },
 })
