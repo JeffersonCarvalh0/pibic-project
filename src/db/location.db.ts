@@ -26,8 +26,11 @@ export let LocationSchema: Schema = new Schema({
   },
 
   coord: {
-    type: { type: String },
-    required: true,
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+    },
     coordinates: [Number], // [longitude, latitude]
   },
 })

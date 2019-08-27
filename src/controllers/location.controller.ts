@@ -26,8 +26,6 @@ const toDB = (obj: ILocationUser) => {
     location.coord = { type: 'Point', coordinates: location.coord }
   }
 
-  // console.log(location);
-
   return location
 }
 
