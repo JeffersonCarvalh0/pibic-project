@@ -15,6 +15,12 @@ export const ContentSchema: Schema = new Schema({
     type: String,
     required: true,
   },
+
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 })
 
 export const ContentModel: Model<IContent> = model<IContent>('Content', ContentSchema)
