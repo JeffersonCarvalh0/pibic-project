@@ -11,7 +11,7 @@ export class UserController {
     passport.authenticate('local', { session: false }, (err: Error, user: IUser, info) => {
       res.statusCode = err || !user ? 401 : 200
       const token = user ? jwt.sign({ id: user._id }, config.SECRET, { expiresIn: '15m' }) : null
-      res.json({ data: { token }, message: info.message, errors: err })
+      res.json({ data: token, message: info.message, errors: err })
     })(req, res)
   }
 

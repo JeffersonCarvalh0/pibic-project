@@ -34,12 +34,12 @@ const opts = {
 }
 passport.use(
   new JwtStrategy(opts, (jwtPayload, done) => {
-    UserModel.findOne({ username: jwtPayload.id })
+    UserModel.findById(jwtPayload.id)
       .then((user: IUser | null) => {
         if (!user) {
-          done(null, false, { message: 'Invalid username from the token' })
+          return done(null, false, { message: 'Invalid id from the token' })
         }
-        done(null, user, { message: 'Successfully authenticated' })
+        return done(null, user, { message: 'Successfully authenticated' })
       })
       .catch((err: Error) => done(err))
   }),
