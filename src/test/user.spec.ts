@@ -140,7 +140,7 @@ describe('Users', () => {
         .request(server.instance)
         .get(`/user`)
         .set('Authorization', `Bearer ${token}`)
-        .set('Content-Type', 'applicaiton/json')
+        .set('Content-Type', 'application/json')
 
       assert.equal(res.status, 200, 'The http code is wrong')
       assert.equal(res.body.data.username, mockUser.username, 'The username is wrong')
