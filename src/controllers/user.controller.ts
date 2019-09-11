@@ -38,7 +38,7 @@ export class UserController {
       if (user) {
         user.password = ''
       }
-      res.json({ data: user, message: info.message, errors: [] })
+      res.json({ data: user, message: info.message, errors: err ? [err] : [] })
     })(req, res)
   }
 
