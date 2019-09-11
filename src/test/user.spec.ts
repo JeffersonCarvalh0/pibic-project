@@ -63,7 +63,7 @@ describe('Users', () => {
         .send(credentials)
 
       assert.equal(res.status, 200, 'The http code is wrong')
-      token = res.body.data.token
+      token = res.body.data
     } catch (err) {
       throw err
     }
