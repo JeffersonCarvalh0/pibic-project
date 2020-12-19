@@ -1,9 +1,6 @@
 import chai, { assert } from 'chai'
 import chaiHttp from 'chai-http'
 
-import { ActivityModel } from '../db/activity.db'
-import { ContentModel } from '../db/content.db'
-import { LocationModel } from '../db/location.db'
 import { UserModel } from '../db/user.db'
 import { server } from '../server'
 
@@ -25,75 +22,13 @@ describe('Users', () => {
     password: mockUser.password,
   }
 
-  const mockLocation = { name: 'test', coord: [1.5, 1.0] }
-  const mockLocation2 = { name: 'test2', coord: [0.8, 0.9] }
-  const mockLocation3 = { name: 'test3', coord: [0.6, 0.7] }
-  const mockContent = { title: 'An awesome title!', description: 'An awesome test!' }
-  const mockActivity = { title: 'activity', description: 'just passing by', threshold: 42 }
-
   let userId: string
-  let contentId: string
-  let locationId: string
-  let location2Id: string
-  let location3Id: string
-  let activityId: string
   let token: string
 
   before(async () => {
     try {
       await server.start()
       await UserModel.deleteMany({})
-      await ContentModel.deleteMany({})
-      await LocationModel.deleteMany({})
-      await ActivityModel.deleteMany({})
-
-      let res = await chai
-        .request(server.instance)
-        .post(`/content`)
-        .set('Content-Type', 'application/json')
-        .send(mockContent)
-      contentId = res.body.data._id
-
-      res = await chai
-        .request(server.instance)
-        .post(`/location`)
-        .set('Content-Type', 'application/json')
-        .send(mockLocation)
-      locationId = res.body.data._id
-
-      res = await chai
-        .request(server.instance)
-        .post(`/location`)
-        .set('Content-Type', 'application/json')
-        .send(mockLocation2)
-      location2Id = res.body.data._id
-
-      res = await chai
-        .request(server.instance)
-        .post(`/location`)
-        .set('Content-Type', 'application/json')
-        .send(mockLocation3)
-      location3Id = res.body.data._id
-
-      await chai
-        .request(server.instance)
-        .put(`/location/${locationId}/${contentId}`)
-        .set('Content-Type', 'application/json')
-
-      res = await chai
-        .request(server.instance)
-        .post(`/activity`)
-        .set('Content-Type', 'application/json')
-        .send(mockActivity)
-      activityId = res.body.data._id
-
-      await chai
-        .request(server.instance)
-        .put(`/activity/${activityId}`)
-        .set('Content-Type', 'application/json')
-        .send({
-          locations: [locationId, location2Id, location3Id],
-        })
     } catch (err) {
       throw err
     }
@@ -128,7 +63,7 @@ describe('Users', () => {
         .send(credentials)
 
       assert.equal(res.status, 200, 'The http code is wrong')
-      token = res.body.data.token
+      token = res.body.data
     } catch (err) {
       throw err
     }
@@ -140,7 +75,7 @@ describe('Users', () => {
         .request(server.instance)
         .get(`/user`)
         .set('Authorization', `Bearer ${token}`)
-        .set('Content-Type', 'applicaiton/json')
+        .set('Content-Type', 'application/json')
 
       assert.equal(res.status, 200, 'The http code is wrong')
       assert.equal(res.body.data.username, mockUser.username, 'The username is wrong')

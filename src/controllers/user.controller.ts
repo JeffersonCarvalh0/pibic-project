@@ -10,8 +10,8 @@ export class UserController {
   public static login(req: Request, res: Response) {
     passport.authenticate('local', { session: false }, (err: Error, user: IUser, info) => {
       res.statusCode = err || !user ? 401 : 200
-      const token = user ? jwt.sign(user.toJSON(), config.SECRET, { expiresIn: '15m' }) : null
-      res.json({ data: { token }, message: info.message, errors: err })
+      const token = user ? jwt.sign({ id: user._id }, config.SECRET, { expiresIn: '15m' }) : null
+      res.json({ data: token, message: info.message, errors: err })
     })(req, res)
   }
 
@@ -38,7 +38,7 @@ export class UserController {
       if (user) {
         user.password = ''
       }
-      res.json({ data: user, message: info.message, errors: [] })
+      res.json({ data: user, message: info.message, errors: err ? [err] : [] })
     })(req, res)
   }
 

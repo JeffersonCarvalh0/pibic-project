@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import mongoose, { Document, Model, model, Schema } from 'mongoose'
+import { Document, Model, model, Schema } from 'mongoose'
 
 import config from '../config'
 
